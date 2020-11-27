@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.ServletContext;
 
 @AutoConfigureMockMvc
-public class UrlshortenerApplicationTests extends MockMvcConfigurerAdapter {
+public class UrlShortenerApplicationTests extends MockMvcConfigurerAdapter {
 
     @Autowired
     protected WebApplicationContext wac;

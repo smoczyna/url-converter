@@ -46,7 +46,7 @@ class UriRepoTest {
     @Test
     void urlShorteningTest() throws Exception {
         String localUrl = "www.this.is.hero";
-        String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
+        String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
         LOGGER.info("Shorten up this url: {}", longUrl);
 
         Long id = uriRepo.generateId();
@@ -67,7 +67,7 @@ class UriRepoTest {
         assertNotNull(longUrlBack);
         assertEquals(longUrl, longUrlBack);
 
-        this.uriRepo.deleteKey("url:");
+        this.uriRepo.deleteHKey("url:");
 
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
             this.uriRepo.getUrlById(100L);

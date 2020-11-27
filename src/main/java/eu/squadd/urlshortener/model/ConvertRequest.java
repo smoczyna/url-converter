@@ -3,14 +3,11 @@ package eu.squadd.urlshortener.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ShortenRequest {
+public class ConvertRequest {
     private String url;
 
     @JsonCreator
-    public ShortenRequest() {}
-
-    @JsonCreator
-    public ShortenRequest(@JsonProperty("url") String url) {
+    public ConvertRequest(@JsonProperty("url") String url) {
         this.url = url;
     }
 

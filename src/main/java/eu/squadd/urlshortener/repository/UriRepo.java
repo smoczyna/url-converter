@@ -8,6 +8,12 @@ import redis.clients.jedis.Jedis;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+/**
+ * author Jaja
+ * Redis CRUD repository
+ * Do all the job about storing and retrieving data
+ */
+
 @Repository
 public class UriRepo {
     private final Jedis jedis;
@@ -32,12 +38,12 @@ public class UriRepo {
     }
 
     public void saveUrl(String key, String longUrl) {
-        LOGGER.info("Saving: {} at {}", longUrl, key);
+        LOGGER.info("Saving: {} at {}", key, longUrl);
         this.jedis.set(key, longUrl);
     }
 
     public void saveHUrl(String key, String longUrl) {
-        LOGGER.info("Saving: {} at {}", longUrl, key);
+        LOGGER.info("Saving: {} at {}", key, longUrl);
         this.jedis.hset(urlKey, key, longUrl);
     }
 
@@ -45,6 +51,16 @@ public class UriRepo {
         LOGGER.info("Retrieving at {}", key);
         String url = this.jedis.get(key);
         LOGGER.info("Retrieved {} at {}", url, key);
+        if (url == null) {
+            throw new NoSuchElementException("URL at key " + key + " does not exist");
+        }
+        return url;
+    }
+
+    public String getHUrlByKey(String key) throws NoSuchElementException {
+        LOGGER.info("Retrieving URl with {}", key);
+        String url = this.jedis.hget(urlKey, key);
+        LOGGER.info("Retrieved {} at {}", key, url);
         if (url == null) {
             throw new NoSuchElementException("URL at key " + key + " does not exist");
         }
@@ -61,9 +77,23 @@ public class UriRepo {
         return url;
     }
 
-    public void deleteKey(String key) {
+    public Long deleteKey(String key) {
         LOGGER.info("Deleting at {}", key);
-        this.jedis.del(key);
+        return this.jedis.del(key);
     }
 
+    public Long deleteHKey(String key) {
+        LOGGER.info("Deleting child at {}", key);
+        return this.jedis.hdel(urlKey, key);
+    }
+
+    public Long deleteHKeyById(Long id) throws NoSuchElementException {
+        LOGGER.info("Deleting child at {}", id);
+        Long count = this.jedis.hdel(urlKey, "url:" + id);
+        LOGGER.info("URL under key {} permanently delete", id);
+        if (count == null) {
+            throw new NoSuchElementException("URL at key " + id + " does not exist");
+        }
+        return count;
+    }
 }
