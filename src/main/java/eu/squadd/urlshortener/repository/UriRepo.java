@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -91,9 +92,16 @@ public class UriRepo {
         LOGGER.info("Deleting child at {}", id);
         Long count = this.jedis.hdel(urlKey, "url:" + id);
         LOGGER.info("URL under key {} permanently delete", id);
-        if (count == null) {
+        if (count == 0) {
             throw new NoSuchElementException("URL at key " + id + " does not exist");
         }
         return count;
+    }
+
+    public Map<String, String> getAllKeyEntries(String key) {
+        LOGGER.info("Getting all children of {}", key);
+        Map<String, String> result = this.jedis.hgetAll(key);
+        LOGGER.info("All entries of {} retrieved", key);
+        return result;
     }
 }

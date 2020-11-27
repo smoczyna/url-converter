@@ -61,15 +61,5 @@ public class UriController {
         redirectView.setUrl("http://" + redirectUrlString);
         return redirectView;
     }
-
-//    @GetMapping("/get/{key}")
-//    public RedirectView redirectUrl(@PathVariable String key) throws NoSuchElementException {
-//        LOGGER.info("Received shortened url to redirect: " + key);
-//        String redirectUrlString = service.getLongUrlWithKey(key);
-//        LOGGER.info("Original URL: " + redirectUrlString);
-//        RedirectView redirectView = new RedirectView();
-//        redirectView.setUrl("http://" + redirectUrlString);
-//        return redirectView;
-//    }
 }
 

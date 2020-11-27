@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -21,14 +22,14 @@ public class UriConverterService {
 
     public String shortenURL(String localURL, String longUrl) {
         LOGGER.info("Converting {}", longUrl);
-        Long id = uriRepo.generateId();
-        LOGGER.info("generated ID: " + id);
+        Long id = this.uriRepo.generateId();
+        LOGGER.info("Generated ID: " + id);
 
         String uniqueID = IdConverter.INSTANCE.createUniqueID(id);
         Long dictionaryKey = IdConverter.INSTANCE.getDictionaryKeyFromUniqueID(uniqueID);
         LOGGER.info("Unique ID: " + uniqueID);
 
-        uriRepo.saveHUrl("url:" + dictionaryKey, longUrl);
+        this.uriRepo.saveHUrl("url:" + dictionaryKey, longUrl);
         String baseString = UriValidator.formatLocalURLFromShortener(localURL);
         String shortenedURL = baseString + uniqueID;
         return shortenedURL;
@@ -36,13 +37,13 @@ public class UriConverterService {
 
     public String getLongUrlWithUniqueID(String uniqueID) throws NoSuchElementException {
         Long dictionaryKey = IdConverter.INSTANCE.getDictionaryKeyFromUniqueID(uniqueID);
-        String longUrl = uriRepo.getUrlById(dictionaryKey);
-        LOGGER.info("Converting short URL back to {}", longUrl);
+        String longUrl = this.uriRepo.getUrlById(dictionaryKey);
+        LOGGER.info("Converted short URL back to {}", longUrl);
         return longUrl;
     }
 
     public String getLongUrlWithKey(String key) throws NoSuchElementException {
-        String longUrl = uriRepo.getHUrlByKey(key);
+        String longUrl = this.uriRepo.getHUrlByKey(key);
         LOGGER.info("Shortened URL conversion back to long {}", longUrl);
         return longUrl;
     }
@@ -52,5 +53,10 @@ public class UriConverterService {
         Long count = uriRepo.deleteHKeyById(dictionaryKey);
         LOGGER.info("Long URL with ID {} permanently deleted", uniqueID);
         return count;
+    }
+
+    protected Map<String, String> getAllKeyEntries(String key) {
+        LOGGER.info("Getting all URLs of key {}", key);
+        return this.uriRepo.getAllKeyEntries(key);
     }
 }

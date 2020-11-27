@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,5 +54,12 @@ class UriConverterServiceTest {
             LOGGER.info(result);
         });
         LOGGER.info(exception.getMessage());
+    }
+
+    @Test
+    public void getAllKeyEntries() {
+        Map<String, String> result = this.service.getAllKeyEntries("url:");
+        assertNotNull(result);
+        Assert.notEmpty(result, "There should some testing URLs saved at this stage");
     }
 }

@@ -2,6 +2,7 @@ package eu.squadd.urlshortener.repository;
 
 import eu.squadd.urlshortener.util.IdConverter;
 import eu.squadd.urlshortener.util.UriValidator;
+import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class UriRepoTest {
@@ -44,7 +47,7 @@ class UriRepoTest {
     }
 
     @Test
-    void urlShorteningTest() throws Exception {
+    void urlShorteningTest() {
         String localUrl = "www.this.is.hero";
         String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
         LOGGER.info("Shorten up this url: {}", longUrl);
@@ -75,4 +78,24 @@ class UriRepoTest {
         assertEquals("URL at key 100 does not exist", exception.getMessage());
     }
 
+    @Test
+    void deleteUrlFailTest() {
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            this.uriRepo.deleteHKeyById(145346756L);
+        });
+        assertEquals("URL at key 145346756 does not exist", exception.getMessage());
+    }
+
+    @Test
+    void getAllKeyEntries() {
+        Map<String, String> result = this.uriRepo.getAllKeyEntries("url:");
+        assertNotNull(result);
+        long i = 0;
+        for (Map.Entry entry : result.entrySet()) {
+            Assert.hasText("url:", entry.getKey().toString());
+            assertNotNull(entry.getValue());
+            i++;
+        }
+        LOGGER.info("Elements checked: " + i);
+    }
 }
