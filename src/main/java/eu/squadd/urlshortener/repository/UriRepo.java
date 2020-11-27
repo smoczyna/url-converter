@@ -41,28 +41,29 @@ public class UriRepo {
         this.jedis.hset(urlKey, key, longUrl);
     }
 
-    public String getUrlByKey(String key) throws Exception {
+    public String getUrlByKey(String key) throws NoSuchElementException {
         LOGGER.info("Retrieving at {}", key);
         String url = this.jedis.get(key);
         LOGGER.info("Retrieved {} at {}", url, key);
         if (url == null) {
-            throw new NoSuchElementException("URL at key" + key + " does not exist");
+            throw new NoSuchElementException("URL at key " + key + " does not exist");
         }
         return url;
     }
 
-    public String getUrlById(Long id) throws Exception {
+    public String getUrlById(Long id) throws NoSuchElementException {
         LOGGER.info("Retrieving at {}", id);
         String url = this.jedis.hget(urlKey, "url:" + id);
         LOGGER.info("Retrieved {} at {}", url, id);
         if (url == null) {
-            throw new NoSuchElementException("URL at key" + id + " does not exist");
+            throw new NoSuchElementException("URL at key " + id + " does not exist");
         }
         return url;
     }
 
-    public void deleteUrl(String key) {
+    public void deleteKey(String key) {
         LOGGER.info("Deleting at {}", key);
         this.jedis.del(key);
     }
+
 }
