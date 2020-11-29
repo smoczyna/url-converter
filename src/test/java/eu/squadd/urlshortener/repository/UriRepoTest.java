@@ -47,8 +47,7 @@ class UriRepoTest {
     }
 
     @Test
-    void urlShorteningTest() {
-        String localUrl = "www.this.is.hero";
+    void urlShorteningLocalTest() {
         String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
         LOGGER.info("Shorten up this url: {}", longUrl);
 
@@ -61,7 +60,7 @@ class UriRepoTest {
         assertNotNull(uniqueID);
 
         uriRepo.saveHUrl("url:" + id, longUrl);
-        String baseString = UriValidator.formatLocalURLFromShortener(localUrl);
+        String baseString = UriValidator.formatLocalURLFromShortener("localhost:8080/urlshortener");
         String shortenedURL = baseString + uniqueID;
         LOGGER.info("Shortened URL: " + shortenedURL);
         assertNotNull(shortenedURL);
@@ -70,12 +69,45 @@ class UriRepoTest {
         assertNotNull(longUrlBack);
         assertEquals(longUrl, longUrlBack);
 
-        this.uriRepo.deleteHKey("url:");
+        String deletedKey = "url:" + id;
+        this.uriRepo.deleteHKey(deletedKey);
 
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
-            this.uriRepo.getUrlById(100L);
+            this.uriRepo.getUrlById(id);
         });
-        assertEquals("URL at key 100 does not exist", exception.getMessage());
+        assertEquals("URL at key " + id +" does not exist", exception.getMessage());
+    }
+
+    @Test
+    void urlShorteningGivenTest() {
+        String shortUrl = "www.this.is.hero";
+        String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
+        LOGGER.info("Shorten up this url: {}", longUrl);
+
+        Long id = uriRepo.generateId();
+        LOGGER.info("generated ID: " + id);
+        assertNotNull(id);
+
+        String uniqueID = IdConverter.INSTANCE.createUniqueID(id);
+        LOGGER.info("Unique ID: " + id);
+        assertNotNull(uniqueID);
+
+        uriRepo.saveNamedHKey(shortUrl, "url:" + id, longUrl);
+        String baseString = UriValidator.formatLocalURLFromShortener(shortUrl);
+        String shortenedURL = baseString + uniqueID;
+        LOGGER.info("Shortened URL: " + shortenedURL);
+        assertNotNull(shortenedURL);
+
+        String longUrlBack = this.uriRepo.getNamedUrlById(shortUrl, id);
+        assertNotNull(longUrlBack);
+        assertEquals(longUrl, longUrlBack);
+
+        this.uriRepo.deleteNamedHKeyById(shortUrl, id);
+
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            this.uriRepo.getNamedUrlById(shortUrl, id);
+        });
+        assertEquals("URL at key " + id +" does not exist", exception.getMessage());
     }
 
     @Test

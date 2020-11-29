@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 /**
- * author Jaja
+ * author smoczyna
  * Redis CRUD repository
  * Do all the job about storing and retrieving data
  */
@@ -21,6 +21,8 @@ public class UriRepo {
     private final String idKey;
     private final String urlKey;
     private static final Logger LOGGER = LoggerFactory.getLogger(UriRepo.class);
+
+    private String namedKey;
 
     public UriRepo() {
         this.jedis = new Jedis();
@@ -39,19 +41,24 @@ public class UriRepo {
     }
 
     public void saveUrl(String key, String longUrl) {
-        LOGGER.info("Saving: {} at {}", key, longUrl);
+        LOGGER.info("Saving key: {} with {}", key, longUrl);
         this.jedis.set(key, longUrl);
     }
 
     public void saveHUrl(String key, String longUrl) {
-        LOGGER.info("Saving: {} at {}", key, longUrl);
+        LOGGER.info("Saving key: {} with {}", key, longUrl);
         this.jedis.hset(urlKey, key, longUrl);
+    }
+
+    public void saveNamedHKey(String shortUrl, String key, String longUrl) {
+        LOGGER.info("Saving: {} at {}", key, longUrl);
+        this.jedis.hset(shortUrl, key, longUrl);
     }
 
     public String getUrlByKey(String key) throws NoSuchElementException {
         LOGGER.info("Retrieving at {}", key);
         String url = this.jedis.get(key);
-        LOGGER.info("Retrieved {} at {}", url, key);
+        LOGGER.info("Retrieved url from {}, result {}", url, key);
         if (url == null) {
             throw new NoSuchElementException("URL at key " + key + " does not exist");
         }
@@ -61,7 +68,7 @@ public class UriRepo {
     public String getHUrlByKey(String key) throws NoSuchElementException {
         LOGGER.info("Retrieving URl with {}", key);
         String url = this.jedis.hget(urlKey, key);
-        LOGGER.info("Retrieved {} at {}", key, url);
+        LOGGER.info("Retrieved url from {}, result {}", key, url);
         if (url == null) {
             throw new NoSuchElementException("URL at key " + key + " does not exist");
         }
@@ -71,7 +78,17 @@ public class UriRepo {
     public String getUrlById(Long id) throws NoSuchElementException {
         LOGGER.info("Retrieving at {}", id);
         String url = this.jedis.hget(urlKey, "url:" + id);
-        LOGGER.info("Retrieved {} at {}", url, id);
+        LOGGER.info("Retrieved url from {}, result {}", url, id);
+        if (url == null) {
+            throw new NoSuchElementException("URL at key " + id + " does not exist");
+        }
+        return url;
+    }
+
+    public String getNamedUrlById(String shortUrl, Long id) throws NoSuchElementException {
+        LOGGER.info("Retrieving at {}", id);
+        String url = this.jedis.hget(shortUrl, "url:" + id);
+        LOGGER.info("Retrieved url from {}, result {}", url, id);
         if (url == null) {
             throw new NoSuchElementException("URL at key " + id + " does not exist");
         }
@@ -89,8 +106,18 @@ public class UriRepo {
     }
 
     public Long deleteHKeyById(Long id) throws NoSuchElementException {
-        LOGGER.info("Deleting child at {}", id);
+        LOGGER.info("Deleting entry at {}", id);
         Long count = this.jedis.hdel(urlKey, "url:" + id);
+        LOGGER.info("URL under key {} permanently delete", id);
+        if (count == 0) {
+            throw new NoSuchElementException("URL at key " + id + " does not exist");
+        }
+        return count;
+    }
+
+    public Long deleteNamedHKeyById(String shortUrl, Long id) throws NoSuchElementException {
+        LOGGER.info("Deleting entry at {}", id);
+        Long count = this.jedis.hdel(shortUrl, "url:" + id);
         LOGGER.info("URL under key {} permanently delete", id);
         if (count == 0) {
             throw new NoSuchElementException("URL at key " + id + " does not exist");

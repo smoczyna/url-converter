@@ -1,9 +1,7 @@
 package eu.squadd.urlshortener.controller;
 
-import com.google.gson.Gson;
 import eu.squadd.urlshortener.UrlShortenerApplicationTests;
 import eu.squadd.urlshortener.model.ConvertRequest;
-import eu.squadd.urlshortener.model.ConvertRequestLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -15,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-class UriControllerTest extends UrlShortenerApplicationTests {
+class UriNamedControllerTest extends UrlShortenerApplicationTests {
 
     @Test
     public void testConfiguration() {
@@ -24,39 +22,42 @@ class UriControllerTest extends UrlShortenerApplicationTests {
 
     @Test
     void shortenUrlTest1() throws Exception {
+        String shortUrl = "www.this.is.hero";
         String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
-        ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
+        ConvertRequest request = new ConvertRequest(shortUrl, longUrl);
 
-        ResultActions response = this.mvc.perform(post("/shortener/add")
+        ResultActions response = this.mvc.perform(post("/shortener-named/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.toJson(request)))
                 .andExpect(status().isOk());
 
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhostshortener/", shortenedUrl);
+        Assert.hasText(shortUrl, shortenedUrl);
 
         String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/shortener/get/" + id)).andExpect(status().is3xxRedirection());
+        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
     }
 
     @Test
     void shortenUrlTest2() throws Exception {
+        String shortUrl = "www.this.is.hero";
         String longUrl = "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu";
-        String request = String.format("{'url': '%s'}", longUrl);
-        ResultActions response = this.mvc.perform(post("/shortener/add-plain-text")
+        String request = String.format("{'shortUrl': '%s', 'longUrl': '%s'}", shortUrl, longUrl);
+        ResultActions response = this.mvc.perform(post("/shortener-named/add-plain-text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
                 .andExpect(status().isOk());
 
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhostshortener/", shortenedUrl);
+        Assert.hasText(shortUrl, shortenedUrl);
     }
 
     @Test
     void redirectUrl() throws Exception {
-        String id = "q";
-        this.mvc.perform(get("/shortener/get/" + id)).andExpect(status().is3xxRedirection());
+        String shortUrl = "www.this.is.hero";
+        String id = "cH";
+        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
     }
 }

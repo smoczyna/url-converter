@@ -20,13 +20,12 @@ class UriConverterServiceTest {
     private UriConverterService service;
 
     @Test
-    void testService() {
-        String localUrl = "https://www.this.was.hero";
+    void testServiceLocalUrl() {
         String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
-        String result = this.service.shortenURL(localUrl, longUrl);
+        String result = this.service.convertLocalUrl("localhost:8080/urlshortener", longUrl);
         LOGGER.info(result);
         assertNotNull(result);
-        Assert.hasText("https://www.this.was.hero", result);
+        Assert.hasText("localhost:8080/urlshortener", result);
 
         String uniqueID = result.substring(result.lastIndexOf('/') + 1);
         String longUrlBack = this.service.getLongUrlWithUniqueID(uniqueID);
@@ -35,6 +34,25 @@ class UriConverterServiceTest {
         assertEquals(longUrl, longUrlBack);
 
         Long count = this.service.deleteLongUrlWithUniqueID(uniqueID);
+        assertEquals(1, count);
+    }
+
+    @Test
+    public void testServiceNamedUrl() {
+        String shortUrl = "www.this.is.hero";
+        String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
+        String result = this.service.convertUrl(shortUrl, longUrl);
+        LOGGER.info(result);
+        assertNotNull(result);
+        Assert.hasText(shortUrl, result);
+
+        String uniqueID = result.substring(result.lastIndexOf('/') + 1);
+        String longUrlBack = this.service.getNamedLongUrlWithUniqueID(shortUrl, uniqueID);
+        LOGGER.info(longUrl);
+        assertNotNull(longUrl);
+        assertEquals(longUrl, longUrlBack);
+
+        Long count = this.service.deleteNamedLongUrlWithUniqueID(shortUrl, uniqueID);
         assertEquals(1, count);
     }
 
