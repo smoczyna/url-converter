@@ -15,9 +15,7 @@ public class AbstractController {
     }
 
     protected String convertLocal(String shortBase, String longUrl) throws Exception {
-        boolean validatedShort = UriValidator.INSTANCE.validateURL(shortBase);
-        boolean validatedLong = UriValidator.INSTANCE.validateURL(longUrl);
-        if (validatedShort && validatedLong) {
+        if (UriValidator.INSTANCE.validateURL(longUrl)) {
             String shortUrl = service.convertLocalUrl(shortBase, longUrl);
             LOGGER.info("Converted url to: " + shortUrl);
             return shortUrl;

@@ -2,7 +2,6 @@ package eu.squadd.urlshortener.repository;
 
 import eu.squadd.urlshortener.util.IdConverter;
 import eu.squadd.urlshortener.util.UriValidator;
-import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +64,9 @@ class UriRepoTest {
         LOGGER.info("Shortened URL: " + shortenedURL);
         assertNotNull(shortenedURL);
 
+        Map<String, String> res = this.uriRepo.getAllKeyEntries("url:");
+        assertTrue(res.size()>0);
+
         String longUrlBack = this.uriRepo.getUrlById(id);
         assertNotNull(longUrlBack);
         assertEquals(longUrl, longUrlBack);
@@ -76,15 +78,19 @@ class UriRepoTest {
             this.uriRepo.getUrlById(id);
         });
         assertEquals("URL at key " + id +" does not exist", exception.getMessage());
+
+        this.uriRepo.deleteKey("id");
+        Map<String, String> resEmpty = this.uriRepo.getAllKeyEntries("url:");
+        assertNotNull(resEmpty);
     }
 
     @Test
     void urlShorteningGivenTest() {
-        String shortUrl = "www.this.is.hero";
+        String shortUrl = "www.this.was.hero";
         String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
         LOGGER.info("Shorten up this url: {}", longUrl);
 
-        Long id = uriRepo.generateId();
+        Long id = uriRepo.generateNamedId(shortUrl);
         LOGGER.info("generated ID: " + id);
         assertNotNull(id);
 
@@ -98,16 +104,24 @@ class UriRepoTest {
         LOGGER.info("Shortened URL: " + shortenedURL);
         assertNotNull(shortenedURL);
 
+        Map<String, String> res = this.uriRepo.getAllKeyEntries(shortUrl);
+        assertEquals(1, res.size());
+
         String longUrlBack = this.uriRepo.getNamedUrlById(shortUrl, id);
         assertNotNull(longUrlBack);
         assertEquals(longUrl, longUrlBack);
 
         this.uriRepo.deleteNamedHKeyById(shortUrl, id);
+        this.uriRepo.deleteKey("id:"+shortUrl);
 
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
             this.uriRepo.getNamedUrlById(shortUrl, id);
         });
         assertEquals("URL at key " + id +" does not exist", exception.getMessage());
+
+        this.uriRepo.deleteKey("id:"+shortUrl);
+        Map<String, String> resEmpty = this.uriRepo.getAllKeyEntries(shortUrl);
+        assertEquals(0, resEmpty.size());
     }
 
     @Test
@@ -119,7 +133,7 @@ class UriRepoTest {
     }
 
     @Test
-    void getAllKeyEntries() {
+    void getAllLocalKeyEntries() {
         Map<String, String> result = this.uriRepo.getAllKeyEntries("url:");
         assertNotNull(result);
         long i = 0;

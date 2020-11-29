@@ -1,8 +1,6 @@
 package eu.squadd.urlshortener.controller;
 
-import com.google.gson.Gson;
 import eu.squadd.urlshortener.UrlShortenerApplicationTests;
-import eu.squadd.urlshortener.model.ConvertRequest;
 import eu.squadd.urlshortener.model.ConvertRequestLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.Assert;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,9 +41,24 @@ class UriControllerTest extends UrlShortenerApplicationTests {
     }
 
     @Test
+    void shortenInvalidURlTest() throws Exception {
+        String longUrl = "htttps://theguardian.com/football/blog/2020/nov/25";
+        ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+        ResultActions response = this.mvc.perform(post("/shortener/add")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(this.toJson(request)))
+                    .andExpect(status().isOk());
+        });
+        assertEquals("Request processing failed; nested exception is java.lang.Exception: Invalid URL provided", exception.getMessage());
+    }
+
+    @Test
     void shortenUrlTest2() throws Exception {
         String longUrl = "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu";
         String request = String.format("{'url': '%s'}", longUrl);
+
         ResultActions response = this.mvc.perform(post("/shortener/add-plain-text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
@@ -52,11 +67,8 @@ class UriControllerTest extends UrlShortenerApplicationTests {
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
         Assert.hasText("http:localhostshortener/", shortenedUrl);
-    }
 
-    @Test
-    void redirectUrl() throws Exception {
-        String id = "q";
+        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
         this.mvc.perform(get("/shortener/get/" + id)).andExpect(status().is3xxRedirection());
     }
 }

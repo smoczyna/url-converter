@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.Assert;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,8 +37,23 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         Assert.notNull(shortenedUrl, "Shortener always return something");
         Assert.hasText(shortUrl, shortenedUrl);
 
-        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
+//        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
+//        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void shortenInvalidURlTest() {
+        String shortUrl = "www.this.is.hero";
+        String longUrl = "htttps://theguardian.com/football/blog/2020/nov/25";
+        ConvertRequest request = new ConvertRequest(shortUrl, longUrl);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            this.mvc.perform(post("/shortener-named/add")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(this.toJson(request)))
+                    .andExpect(status().isOk());
+        });
+        assertEquals("Request processing failed; nested exception is java.lang.Exception: Invalid URL provided", exception.getMessage());
     }
 
     @Test
@@ -52,12 +69,8 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
         Assert.hasText(shortUrl, shortenedUrl);
-    }
 
-    @Test
-    void redirectUrl() throws Exception {
-        String shortUrl = "www.this.is.hero";
-        String id = "cH";
+        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
         this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
     }
 }

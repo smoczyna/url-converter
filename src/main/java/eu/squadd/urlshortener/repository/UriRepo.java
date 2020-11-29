@@ -22,8 +22,6 @@ public class UriRepo {
     private final String urlKey;
     private static final Logger LOGGER = LoggerFactory.getLogger(UriRepo.class);
 
-    private String namedKey;
-
     public UriRepo() {
         this.jedis = new Jedis();
         this.idKey = "id";
@@ -35,8 +33,15 @@ public class UriRepo {
     }
 
     public Long generateId() {
-        Long id = this.jedis.incr(idKey);
+        Long id = this.jedis.incr(this.idKey);
         LOGGER.info("Incrementing ID: {}", id - 1);
+        return id - 1;
+    }
+
+    public Long generateNamedId(String shortUrl) {
+        String namedId = String.format("%s:%s", this.idKey, shortUrl);
+        Long id = this.jedis.incr(namedId);
+        LOGGER.info("Incrementing ID for: {} {}", shortUrl, id - 1);
         return id - 1;
     }
 

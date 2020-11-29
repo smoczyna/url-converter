@@ -45,7 +45,7 @@ public class UriConverterService {
 
     public String convertUrl(String shortUrl, String longUrl) {
         LOGGER.info("Converting {}", longUrl);
-        Long id = this.uriRepo.generateId();
+        Long id = this.uriRepo.generateNamedId(shortUrl);
         LOGGER.info("Generated ID: " + id);
 
         String uniqueID = IdConverter.INSTANCE.createUniqueID(id);
@@ -87,8 +87,14 @@ public class UriConverterService {
 
     public Long deleteNamedLongUrlWithUniqueID(String shortUrl, String uniqueID) throws NoSuchElementException {
         Long dictionaryKey = IdConverter.INSTANCE.getDictionaryKeyFromUniqueID(uniqueID);
-        Long count = uriRepo.deleteNamedHKeyById(shortUrl, dictionaryKey);
+        Long count = this.uriRepo.deleteNamedHKeyById(shortUrl, dictionaryKey);
         LOGGER.info("Long URL with ID {} permanently deleted", uniqueID);
+        return count;
+    }
+
+    public Long deleteKey(String key) throws NoSuchElementException {
+        Long count = this.uriRepo.deleteKey(key);
+        LOGGER.info("Key counter {} permanently deleted", key);
         return count;
     }
 
