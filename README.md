@@ -1,8 +1,8 @@
 # URL Converter
 
-##Java Service converting long URLs into short representation.
+## Java Service converting long URLs into short representation.
  
-####Project built with Java 11, it is using Redis DB as a persistence storage.
+#### Project built with Java 11, it is using Redis DB as a persistence storage.
 
 Converter utilizes Base 10 to Base 62 conversion technique to produce short URL and convert them back into long URL one.
 
@@ -11,9 +11,9 @@ _/url-converter-named/_ endponits deal with first case while _/url-converter/_ w
 When user send conversion request without care about the result, it's original url used to send request is used
 as the base to create shot url.  
 
-###Endpoints
+### Endpoints
 
-####Convert long URL into the short one
+#### Convert long URL into the short one
 Service exposes 4 endpoints for user convenience:
 
 *  **/url-converter/add** - accepts application/json payload
@@ -48,7 +48,7 @@ Both requests find long URLs in the database and return them.
 
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
 
-###Project Structure
+### Project Structure
 Source code is a regular Spring application and is organized accordingly:
 - **controller** contains rest controllers serving above endpoints 
 - **model** contains payload classes for all endpoints   
@@ -58,12 +58,12 @@ Source code is a regular Spring application and is organized accordingly:
 
 **application.properties** file is the only resource used. It holds Influx DB connections details required by service monitor.
 
-###Service Monitor
+### Service Monitor
 
 Monitoring and statistics gathering is resolved with TICK stack.
 Service sens its measurements to time series database, which TICK stack picks for further analysis.   
 
-#####TICK Stack
+##### TICK Stack
 
 The TICK Stack is an acronym for a platform of open source tools built to make operations on time series data incredibly easy.
 - “T” stands for Telegraf. It's a metrics collection agent. Use it to collect and send metrics to InfluxDB.
@@ -91,13 +91,6 @@ docker-compose also can pull images, following sequence does the same job:
 - docker-compose pull kapacitor
 - docker-compose pull quay.io/influxdb/chronograf:1.8.8
 - docker-compose up
-
-
-   
-    Chronograf: A UI layer for the whole TICK stack. Use it to set up graphs and dashboards of data in InfluxDB and hook up Kapacitor alerts.
-    Kapacitor: A metrics and events processing and alerting engine. 
-    Use it to crunch time series data into actionable alerts and easily send those alerts to many popular products like PagerDuty and Slack.
-
 
 
 
