@@ -27,17 +27,17 @@ class UriControllerTest extends UrlShortenerApplicationTests {
         String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
         ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
 
-        ResultActions response = this.mvc.perform(post("/shortener/add")
+        ResultActions response = this.mvc.perform(post("/url-converter/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.toJson(request)))
                 .andExpect(status().isOk());
 
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhostshortener/", shortenedUrl);
+        Assert.hasText("http:localhosturl-converter/", shortenedUrl);
 
         String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/shortener/get/" + id)).andExpect(status().is3xxRedirection());
+        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -46,7 +46,7 @@ class UriControllerTest extends UrlShortenerApplicationTests {
         ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
 
         Exception exception = assertThrows(Exception.class, () -> {
-        ResultActions response = this.mvc.perform(post("/shortener/add")
+        ResultActions response = this.mvc.perform(post("/url-converter/add")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(this.toJson(request)))
                     .andExpect(status().isOk());
@@ -59,16 +59,16 @@ class UriControllerTest extends UrlShortenerApplicationTests {
         String longUrl = "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu";
         String request = String.format("{'url': '%s'}", longUrl);
 
-        ResultActions response = this.mvc.perform(post("/shortener/add-plain-text")
+        ResultActions response = this.mvc.perform(post("/url-converter/add-plain-text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
                 .andExpect(status().isOk());
 
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhostshortener/", shortenedUrl);
+        Assert.hasText("http:localhosturl-converter/", shortenedUrl);
 
         String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/shortener/get/" + id)).andExpect(status().is3xxRedirection());
+        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is3xxRedirection());
     }
 }

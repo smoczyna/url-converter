@@ -5,6 +5,12 @@ import eu.squadd.urlshortener.util.UriValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * author smoczyna
+ * base controller class for both local and named controllers
+ * contains base conversion methods
+ */
+
 public abstract class AbstractController {
     protected static final Logger LOGGER = LoggerFactory.getLogger(UriController.class);
 

@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
  */
 
 @RestController
-@RequestMapping("/shortener")
+@RequestMapping("/url-converter")
 public class UriController extends AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UriController.class);
 
@@ -27,7 +27,7 @@ public class UriController extends AbstractController {
         super(service);
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<String> convertUrl(@RequestBody @Validated ConvertRequestLocal convertRequest, HttpServletRequest request) throws Exception {
         LOGGER.info("Received url to convert: " + convertRequest.getUrl());
         String localURL = request.getRequestURL().toString();

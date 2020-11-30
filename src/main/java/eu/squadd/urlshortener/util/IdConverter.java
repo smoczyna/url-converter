@@ -5,6 +5,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Denim Mazuki
+ * this is origal Base62 ecoder found in the internet
+ * it is responsible to encodding/decoding geenrated IDs to String and back
+ * Gerenrated ID 'called UniqueID' is used to store entry in Redis DB
+ * and to obtain it back from DB with shertened code (last section of short URL)
+ */
+
 public class IdConverter {
     public static final IdConverter INSTANCE = new IdConverter();
 

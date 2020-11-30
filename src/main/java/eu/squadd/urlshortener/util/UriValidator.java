@@ -3,6 +3,10 @@ package eu.squadd.urlshortener.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * author smoczyna
+ */
+
 public class UriValidator {
     public static final UriValidator INSTANCE = new UriValidator();
     private static final String URL_REGEX = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";

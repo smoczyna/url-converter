@@ -16,14 +16,14 @@ import java.util.NoSuchElementException;
  */
 
 @RestController
-@RequestMapping("/shortener-named")
+@RequestMapping("/url-converter-named")
 public class UriNamedController extends AbstractController {
 
     public UriNamedController(UriConverterService service) {
         super(service);
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<String> convertUrl(@RequestBody @Validated final ConvertRequest convertRequest) throws Exception {
         LOGGER.info("Received url to convert: " + convertRequest.getLongUrl());
         return new ResponseEntity<>(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);
