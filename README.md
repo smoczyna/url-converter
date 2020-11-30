@@ -56,7 +56,12 @@ Source code is a regular Spring application and is organized accordingly:
 - **service** contains URL conversion service class responsible for encoding and decoding URLs
 - **util** contains Base62 encoder and URL validator
 
-**application.properties** file is the only resource used. It holds Influx DB connections details required by service monitor.
+**application.properties** file is the only resource used. It holds Influx DB connections details required by the service monitor.
+    
+    Building and Testing : there will be more about that a bit later, it's contenerization is not reeady yet.
+    For now project can be built and run as regular Spring Boot Application from pretty much any IDE.
+    Monitor is already in docker contaners and its setup is independent. Next section explains hot to deploy it.
+
 
 ### Service Monitor
 
