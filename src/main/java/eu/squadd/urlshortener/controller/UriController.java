@@ -43,13 +43,23 @@ public class UriController extends AbstractController {
     }
 
     @GetMapping("/get/{id}")
-    public RedirectView redirectUrl(@PathVariable String id) throws NoSuchElementException {
+    public ResponseEntity<String> getLongUrl(@PathVariable String id) throws NoSuchElementException {
         LOGGER.info("Received uniqueID to redirect: " + id);
+        String redirectUrlString = service.getLongUrlWithUniqueID(id);
+        LOGGER.info("Original URL: " + redirectUrlString);
+        return new ResponseEntity<>(redirectUrlString, HttpStatus.OK);
+    }
+
+    @GetMapping("/redirect/{id}")
+    public RedirectView redirectShorUrl(@PathVariable String id, HttpServletRequest request) {
+        String shortUrl = request.getHeader("short-url");
+        if (shortUrl == null) throw new NoSuchElementException("Generated before Short URL need to be provided in the header: short-url");
         String redirectUrlString = service.getLongUrlWithUniqueID(id);
         LOGGER.info("Original URL: " + redirectUrlString);
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("http://" + redirectUrlString);
         return redirectView;
     }
+
 }
 

@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 
 /**
@@ -36,9 +37,20 @@ public class UriNamedController extends AbstractController {
         return new ResponseEntity<>(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{shortUrl}/{id}")
-    public RedirectView redirectUrl(@PathVariable String shortUrl, @PathVariable String id) throws NoSuchElementException {
+    @GetMapping("/get/{id}")
+    public ResponseEntity<String> redirectUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
+        String shortUrl = request.getHeader("short-url");
+        if (shortUrl == null) throw new NoSuchElementException("Generated before Short URL need to be provided in the header: short-url");
+        String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);
+        LOGGER.info("Original URL: " + redirectUrlString);
+        return new ResponseEntity<>(redirectUrlString, HttpStatus.OK);
+    }
+
+    @GetMapping("/redirect/{id}")
+    public RedirectView redirectShorUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
         LOGGER.info("Received uniqueID to redirect: " + id);
+        String shortUrl = request.getHeader("short-url");
+        if (shortUrl == null) throw new NoSuchElementException("Generated before Short URL need to be provided in the header: short-url");
         String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);
         LOGGER.info("Original URL: " + redirectUrlString);
         RedirectView redirectView = new RedirectView();

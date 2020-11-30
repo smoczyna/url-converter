@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.Assert;
+import org.springframework.web.util.NestedServletException;
+
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,7 +26,7 @@ class UriControllerTest extends UrlShortenerApplicationTests {
     }
 
     @Test
-    void shortenUrlTest1() throws Exception {
+    void convertUrlTest1() throws Exception {
         String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
         ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
 
@@ -32,16 +35,18 @@ class UriControllerTest extends UrlShortenerApplicationTests {
                 .content(this.toJson(request)))
                 .andExpect(status().isOk());
 
-        String shortenedUrl = response.andReturn().getResponse().getContentAsString();
-        Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhosturl-converter/", shortenedUrl);
+        String convertedUrl = response.andReturn().getResponse().getContentAsString();
+        Assert.notNull(convertedUrl, "Shortener always return something");
+        Assert.hasText("http:localhosturl-converter/", convertedUrl);
 
-        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is3xxRedirection());
+        String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
+        this.mvc.perform(get("/url-converter/get/" + "/" + id)
+                .header("short-url", "http:localhosturl-converter"))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    void shortenInvalidURlTest() throws Exception {
+    void convertInvalidURlTest() throws Exception {
         String longUrl = "htttps://theguardian.com/football/blog/2020/nov/25";
         ConvertRequestLocal request = new ConvertRequestLocal(longUrl);
 
@@ -55,7 +60,7 @@ class UriControllerTest extends UrlShortenerApplicationTests {
     }
 
     @Test
-    void shortenUrlTest2() throws Exception {
+    void convertUrlTest2() throws Exception {
         String longUrl = "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu";
         String request = String.format("{'url': '%s'}", longUrl);
 
@@ -64,11 +69,17 @@ class UriControllerTest extends UrlShortenerApplicationTests {
                 .content(request))
                 .andExpect(status().isOk());
 
-        String shortenedUrl = response.andReturn().getResponse().getContentAsString();
-        Assert.notNull(shortenedUrl, "Shortener always return something");
-        Assert.hasText("http:localhosturl-converter/", shortenedUrl);
+        String convertedUrl = response.andReturn().getResponse().getContentAsString();
+        Assert.notNull(convertedUrl, "Shortener always return something");
+        Assert.hasText("http:localhosturl-converter/", convertedUrl);
 
-        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is3xxRedirection());
+        String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
+
+        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is2xxSuccessful());
+
+        this.mvc.perform(get("/url-converter/redirect/" + id)
+                .header("short-url", "http:localhosturl-converter"))
+                .andExpect(status().is3xxRedirection());
     }
+
 }
