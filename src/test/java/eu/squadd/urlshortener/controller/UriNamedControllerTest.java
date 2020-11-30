@@ -36,9 +36,6 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         String shortenedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(shortenedUrl, "Shortener always return something");
         Assert.hasText(shortUrl, shortenedUrl);
-
-//        String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-//        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
     }
 
     @Test

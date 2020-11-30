@@ -21,7 +21,7 @@ public class UriNamedController extends AbstractController {
         super(service);
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/add")
     public String convertUrl(@RequestBody @Validated final ConvertRequest convertRequest) throws Exception {
         LOGGER.info("Received url to convert: " + convertRequest.getLongUrl());
         return this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl());

@@ -25,8 +25,8 @@ public class UriController extends AbstractController {
         super(service);
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
-    public String convertUrl(@RequestBody @Validated final ConvertRequestLocal convertRequest, HttpServletRequest request) throws Exception {
+    @PostMapping(value = "/add")
+    public String convertUrl(@RequestBody ConvertRequestLocal convertRequest, HttpServletRequest request) throws Exception {
         LOGGER.info("Received url to convert: " + convertRequest.getUrl());
         String localURL = request.getRequestURL().toString();
         return this.convertLocal(localURL, convertRequest.getUrl());

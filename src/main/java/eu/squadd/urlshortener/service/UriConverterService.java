@@ -53,8 +53,7 @@ public class UriConverterService {
         LOGGER.info("Unique ID: " + uniqueID);
 
         this.uriRepo.saveNamedHKey(shortUrl, "url:" + dictionaryKey, longUrl);
-        String baseString = UriValidator.formatLocalURLFromShortener(shortUrl);
-        String shortenedURL = baseString + uniqueID;
+        String shortenedURL = shortUrl + "/" + uniqueID;
         return shortenedURL;
     }
 
