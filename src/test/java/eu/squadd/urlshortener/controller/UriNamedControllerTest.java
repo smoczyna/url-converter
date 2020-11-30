@@ -28,7 +28,7 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         String longUrl = "https://www.theguardian.com/football/blog/2020/nov/25/diego-maradona-argentina-child-genius-who-became-the-fulfilment-of-a-prophecy?utm_source=pocket-newtab-global-en-GB";
         ConvertRequest request = new ConvertRequest(shortUrl, longUrl);
 
-        ResultActions response = this.mvc.perform(post("/shortener-named/add")
+        ResultActions response = this.mvc.perform(post("/url-converter-named/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.toJson(request)))
                 .andExpect(status().isOk());
@@ -45,7 +45,7 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         ConvertRequest request = new ConvertRequest(shortUrl, longUrl);
 
         Exception exception = assertThrows(Exception.class, () -> {
-            this.mvc.perform(post("/shortener-named/add")
+            this.mvc.perform(post("/url-converter-named/add")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(this.toJson(request)))
                     .andExpect(status().isOk());
@@ -58,7 +58,7 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         String shortUrl = "www.this.is.hero";
         String longUrl = "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu";
         String request = String.format("{'shortUrl': '%s', 'longUrl': '%s'}", shortUrl, longUrl);
-        ResultActions response = this.mvc.perform(post("/shortener-named/add-plain-text")
+        ResultActions response = this.mvc.perform(post("/url-converter-named/add-plain-text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
                 .andExpect(status().isOk());
@@ -68,6 +68,6 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         Assert.hasText(shortUrl, shortenedUrl);
 
         String id = shortenedUrl.substring(shortenedUrl.lastIndexOf('/') + 1);
-        this.mvc.perform(get("/shortener-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
+        this.mvc.perform(get("/url-converter-named/get/" + shortUrl + "/" + id)).andExpect(status().is3xxRedirection());
     }
 }
