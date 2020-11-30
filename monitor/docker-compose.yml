@@ -41,6 +41,7 @@ services:
     telegraf:
         image: telegraf
         volumes:
+            - ./etc/rsyslog.conf:/etc/rsyslog.conf
             - ./etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
         links:
             - influxdb

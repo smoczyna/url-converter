@@ -5,7 +5,7 @@ import eu.squadd.urlshortener.util.UriValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AbstractController {
+public abstract class AbstractController {
     protected static final Logger LOGGER = LoggerFactory.getLogger(UriController.class);
 
     protected final UriConverterService service;
@@ -24,7 +24,6 @@ public class AbstractController {
         }
     }
 
-
     protected String convertGiven(String shortBase, String longUrl) throws Exception {
         boolean validatedShort = UriValidator.INSTANCE.validateURL(shortBase);
         boolean validatedLong = UriValidator.INSTANCE.validateURL(longUrl);
@@ -36,5 +35,4 @@ public class AbstractController {
             throw new Exception("Invalid URL provided");
         }
     }
-
 }

@@ -5,6 +5,8 @@ import eu.squadd.urlshortener.model.ConvertRequestLocal;
 import eu.squadd.urlshortener.service.UriConverterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -26,18 +28,18 @@ public class UriController extends AbstractController {
     }
 
     @PostMapping(value = "/add")
-    public String convertUrl(@RequestBody ConvertRequestLocal convertRequest, HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> convertUrl(@RequestBody @Validated ConvertRequestLocal convertRequest, HttpServletRequest request) throws Exception {
         LOGGER.info("Received url to convert: " + convertRequest.getUrl());
         String localURL = request.getRequestURL().toString();
-        return this.convertLocal(localURL, convertRequest.getUrl());
+        return new ResponseEntity<>(this.convertLocal(localURL, convertRequest.getUrl()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/add-plain-text")
-    public String convertUrl(@RequestBody final String shortenJsonRequest, HttpServletRequest request) throws Exception {
-        LOGGER.info("Received url to convert: " + shortenJsonRequest);
-        ConvertRequestLocal convertRequest = new Gson().fromJson(shortenJsonRequest, ConvertRequestLocal.class);
+    public ResponseEntity<String> convertUrl(@RequestBody final String strJsonConvertRequest, HttpServletRequest request) throws Exception {
+        LOGGER.info("Received url to convert: " + strJsonConvertRequest);
+        ConvertRequestLocal convertRequest = new Gson().fromJson(strJsonConvertRequest, ConvertRequestLocal.class);
         String localURL = request.getRequestURL().toString();
-        return this.convertLocal(localURL, convertRequest.getUrl());
+        return new ResponseEntity<>(this.convertLocal(localURL, convertRequest.getUrl()), HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")

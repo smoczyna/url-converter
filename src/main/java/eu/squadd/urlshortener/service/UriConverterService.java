@@ -12,9 +12,9 @@ import java.util.NoSuchElementException;
 
 /**
  * author smoczyna
- * service responsible for URL convertion in both ways
- * shorten request creates and entry in redis db
- * getter methods obtain long URLs either with the the db key or generated ID
+ * service responsible for URL conversion in both directions
+ * shorten request converts long URL and creates relevant entry in redis db
+ * getter methods obtain long URLs either with the the db key or generated dictionary ID
  * delete method removed long URL from the collections of urls
  */
 
