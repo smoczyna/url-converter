@@ -59,10 +59,9 @@ Source code is a regular Spring application and is organized accordingly:
 
 **application.properties** file is the only resource used. It holds Influx DB connections details required by the service monitor.
     
-    Building and Testing : there will be more about that a bit later, it's contenerization is not reeady yet.
-    For now project can be built and run as regular Spring Boot Application from pretty much any IDE.
-    Monitor is already in docker contaners and its setup is independent. Next section explains hot to deploy it.
-
+    Building : Since whole projects sits in docker containers there is noting to build here. Deployment steps are explained below.
+    Testing: There are couple of python scripts in /scripts floder helping with this. 
+             Their names suggest the purpose and Python interperter is required to run them. More about this can be found below either.
 
 ### Service Monitor
 
@@ -79,7 +78,7 @@ The TICK Stack is an acronym for a platform of open source tools built to make o
 
 It has pretty nifty interface and provides all tools necessary for application surveillance.
 
-![chronograf](./images/chronografUI.png)  
+![chronograf](./screen-shots/chronografUI.png)  
 
 Whole stack can be deployed as single docker container.
 Project has folder **monitor** which contain all the files required by the monitor deployment.
@@ -89,6 +88,8 @@ following commands pulls all required components and creates the environment:
 - docker pull telegraf
 - docker pull kapacitor
 - docker pull quay.io/influxdb/chronograf
+- docker pull redis
+- docker pull 
 - finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
 
 docker-compose also can pull images, following sequence does the same job:
