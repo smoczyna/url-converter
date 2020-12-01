@@ -37,7 +37,7 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
                 .andExpect(status().isOk());
 
         String convertedUrl = response.andReturn().getResponse().getContentAsString();
-        Assert.notNull(convertedUrl, "Shortener always return something");
+        Assert.notNull(convertedUrl, "Converter always returns something");
         Assert.hasText(shortUrl, convertedUrl);
 
         String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
@@ -73,7 +73,7 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
                 .andExpect(status().isOk());
 
         String convertedUrl = response.andReturn().getResponse().getContentAsString();
-        Assert.notNull(convertedUrl, "Shortener always return something");
+        Assert.notNull(convertedUrl, "Converter always returns something");
         Assert.hasText(shortUrl, convertedUrl);
 
         String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
