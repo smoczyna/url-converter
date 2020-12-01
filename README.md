@@ -1,6 +1,6 @@
 # URL Converter
 
-## Java Service converting long URLs into short representation.
+## Java Service converting long URLs into short once and back.
  
 #### Project built with Java 11, it is using Redis DB as a persistence storage.
 
@@ -9,7 +9,8 @@ Converter utilizes Base 10 to Base 62 conversion technique to produce short URL 
 General assumption here is that user can send long url with proposed short url or without it.
 _/url-converter-named/_ endponits deal with first case while _/url-converter/_ with the second one respectively. 
 When user send conversion request without care about the result, it's original url used to send request is used
-as the base to create shot url.  
+as the base to create shot url.
+Whatever the way chosen there are two separate endpoints for each method for json and plain text inputs.
 
 ### Endpoints
 
@@ -66,7 +67,7 @@ Source code is a regular Spring application and is organized accordingly:
 ### Service Monitor
 
 Monitoring and statistics gathering is resolved with TICK stack.
-Service sens its measurements to time series database, which TICK stack picks for further analysis.   
+Service sends its measurements to time series database, which TICK stack picks for further analysis.   
 
 ##### TICK Stack
 
@@ -87,7 +88,7 @@ following commands pulls all required components and creates the environment:
 - docker pull influxdb
 - docker pull telegraf
 - docker pull kapacitor
-- docker pull quay.io/influxdb/chronograf:1.8.8
+- docker pull quay.io/influxdb/chronograf
 - finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
 
 docker-compose also can pull images, following sequence does the same job:
