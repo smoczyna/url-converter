@@ -68,7 +68,6 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         String request = String.format("{'shortUrl': '%s', 'longUrl': '%s'}", shortUrl, longUrl);
 
         ResultActions response = this.mvc.perform(post("/url-converter-named/add-plain-text")
-                .contentType(MediaType.APPLICATION_JSON)
                 .content(request))
                 .andExpect(status().isOk());
 

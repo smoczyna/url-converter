@@ -78,7 +78,7 @@ The TICK Stack is an acronym for a platform of open source tools built to make o
 
 It has pretty nifty interface and provides all tools necessary for application surveillance.
 
-![chronograf](./images/chronografUI.png)  
+![chronograf](screen-shots/chronografUI.png)  
 
 Whole stack can be deployed as single docker container.
 Project has folder **monitor** which contain all the files required by the monitor deployment.

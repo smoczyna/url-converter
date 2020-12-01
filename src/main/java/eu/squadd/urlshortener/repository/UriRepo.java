@@ -23,7 +23,7 @@ public class UriRepo {
     private static final Logger LOGGER = LoggerFactory.getLogger(UriRepo.class);
 
     public UriRepo() {
-        this.jedis = new Jedis();
+        this.jedis = new Jedis("redis");
         this.idKey = "id";
         this.urlKey = "url:";
     }
