@@ -35,7 +35,7 @@ Long URLs need to be valid syntactically URLs, following examples fail when sent
     "httttps://www.my.short.url"
     "https://wwwmyshorturl"
 
-####Convert short URL back into the long one
+#### Convert short URL back into the long one
 Service exposes 4 endpoints corresponding to the conversion method used :
 
 * **/url-converter/get/{id}**
