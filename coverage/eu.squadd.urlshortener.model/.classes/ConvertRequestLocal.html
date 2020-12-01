@@ -1,0 +1,105 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConvertRequestLocal</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">eu.squadd.urlshortener.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConvertRequestLocal (eu.squadd.urlshortener.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConvertRequestLocal</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package eu.squadd.urlshortener.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.fasterxml.jackson.annotation.JsonCreator;
+<i>4</i>&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * author smoczyna
+<i>8</i>&nbsp; * this payload class is used by so called &#39;local convertor&#39;
+<i>9</i>&nbsp; * in this case short URL is build from the original request
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class ConvertRequestLocal {
+<i>12</i>&nbsp;    private String url;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @JsonCreator
+<b class="fc"><i>15</i>&nbsp;    public ConvertRequestLocal(@JsonProperty(&quot;url&quot;) String url) {</b>
+<b class="fc"><i>16</i>&nbsp;        this.url = url;</b>
+<b class="fc"><i>17</i>&nbsp;    }</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public String getUrl() {
+<b class="fc"><i>20</i>&nbsp;        return url;</b>
+<i>21</i>&nbsp;    }
+<i>22</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-11-30 21:22</div>
+</div>
+</body>
+</html>
