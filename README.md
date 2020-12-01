@@ -16,15 +16,15 @@ as the base to create shot url.
 #### Convert long URL into the short one
 Service exposes 4 endpoints for user convenience:
 
-*  **/url-converter/add** - accepts application/json payload
-*  **/url-converter/add-plain-text** - accepts plain text payload
+*  __/url-converter/add__ - accepts application/json payload
+*  __/url-converter/add-plain-text__ - accepts plain text payload
 
 Both endpoints require json payload of the following format:
     
     {"url": "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu"}
 
-*  **/url-converter-named/add** - accepts application/json payload
-*  **/url-converter-named/add-plain-text** - accepts plain text payload
+*  __/url-converter-named/add__ - accepts application/json payload
+*  __/url-converter-named/add-plain-text__ - accepts plain text payload
 
 Both endpoints require json payload of the following format:
     
