@@ -23,6 +23,8 @@ public class UriRepo {
     private static final Logger LOGGER = LoggerFactory.getLogger(UriRepo.class);
 
     public UriRepo() {
+//        this.jedis = new Jedis("localhost", 6379, 3600);
+//        this.jedis = new Jedis("localhost", 6379, 3600);
         this.jedis = new Jedis("redis");
         this.idKey = "id";
         this.urlKey = "url:";
@@ -32,30 +34,31 @@ public class UriRepo {
         return UUID.randomUUID();
     }
 
-    public Long generateId() {
+    public synchronized Long generateId() {
         Long id = this.jedis.incr(this.idKey);
         LOGGER.info("Incrementing ID: {}", id - 1);
         return id - 1;
     }
 
-    public Long generateNamedId(String shortUrl) {
+    public synchronized Long generateNamedId(String shortUrl) {
         String namedId = String.format("%s:%s", this.idKey, shortUrl);
         Long id = this.jedis.incr(namedId);
         LOGGER.info("Incrementing ID for: {} {}", shortUrl, id - 1);
         return id - 1;
     }
 
-    public void saveUrl(String key, String longUrl) {
+
+    public synchronized void saveUrl(String key, String longUrl) {
         LOGGER.info("Saving key: {} with {}", key, longUrl);
         this.jedis.set(key, longUrl);
     }
 
-    public void saveHUrl(String key, String longUrl) {
+    public synchronized void saveHUrl(String key, String longUrl) {
         LOGGER.info("Saving key: {} with {}", key, longUrl);
         this.jedis.hset(urlKey, key, longUrl);
     }
 
-    public void saveNamedHKey(String shortUrl, String key, String longUrl) {
+    public synchronized void saveNamedHKey(String shortUrl, String key, String longUrl) {
         LOGGER.info("Saving: {} at {}", key, longUrl);
         this.jedis.hset(shortUrl, key, longUrl);
     }
