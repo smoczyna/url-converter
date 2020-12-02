@@ -92,6 +92,12 @@ It has pretty nifty interface and provides all tools necessary for application s
 
 Whole stack can be deployed as single docker container.
 Project has folder **converter-dist** which contain all the files required by the monitor deployment.
+However due to git restrictions contents of this folder are added to properly, GitHub does not contain everything as it supposed to.
+Correct folder content looks like this:
+
+![converter-dist](./screen-shots/converter-dist-contents.png)
+
+All missing folder should added manually bore running docker commands.
 
 following commands pulls all required components and creates the environment:
 - docker pull influxdb
