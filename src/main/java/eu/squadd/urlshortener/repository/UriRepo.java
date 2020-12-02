@@ -24,7 +24,6 @@ public class UriRepo {
 
     public UriRepo() {
 //        this.jedis = new Jedis("localhost", 6379, 3600);
-//        this.jedis = new Jedis("localhost", 6379, 3600);
         this.jedis = new Jedis("redis");
         this.idKey = "id";
         this.urlKey = "url:";
