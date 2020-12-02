@@ -65,8 +65,9 @@ Since whole projects sits in docker containers there is noting to build here. De
     
 #### Testing
 
-There are a couple of python scripts in /scripts folder helping with this. 
-Their names suggest the purpose but Python interpreter is required to run them. More about this can be found below either.
+There are 2 python scripts in /scripts folder helping with this. 
+Their names suggest the purpose but Python interpreter is required to run them. 
+More about this can be found below either.
 
 ### Service Monitor
 
@@ -125,7 +126,7 @@ Similarly to testing all useful scripts and queries are located in /scripts fold
 Converter relies on Base62 to Base10 conversion and vice versa. I have tried 2 different algorithms, they are fast and reliable but both have the limitation too.
 The highest convertible Long number is 999999999999999, bigger numbers might cause the conversion results not to match.
 So it seems that overall number of request per URL (proposed short or default) is that high.
-There isn't any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
+There isn't any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) to verify that as it takes too long. 
 
 Redis connection is synchronized (it's all save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
 
