@@ -59,9 +59,14 @@ Source code is a regular Spring application and is organized accordingly:
 
 **application.properties** file is the only resource used. It holds Influx DB connections details required by the service monitor.
     
-    Building : Since whole projects sits in docker containers there is noting to build here. Deployment steps are explained below.
-    Testing: There are couple of python scripts in /scripts floder helping with this. 
-             Their names suggest the purpose and Python interperter is required to run them. More about this can be found below either.
+#### Building
+
+Since whole projects sits in docker containers there is noting to build here. Deployment steps are explained below.
+    
+#### Testing
+
+There are a couple of python scripts in /scripts folder helping with this. 
+Their names suggest the purpose but Python interpreter is required to run them. More about this can be found below either.
 
 ### Service Monitor
 
@@ -83,7 +88,7 @@ It has pretty nifty interface and provides all tools necessary for application s
 ### Deployment
 
 Whole stack can be deployed as single docker container.
-Project has folder **monitor** which contain all the files required by the monitor deployment.
+Project has folder **converter-dist** which contain all the files required by the monitor deployment.
 
 following commands pulls all required components and creates the environment:
 - docker pull influxdb
@@ -93,25 +98,34 @@ following commands pulls all required components and creates the environment:
 - docker pull redis
 - docker pull smoczyna/url-converter
 
-finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
+finally _docker-compose up_ executed from converter-dist folder does all the tricks to put everything together
 
 **docker-compose** also can pull images, following sequence does the same job:
 
+cd converter-dist
 - docker-compose pull influxdb
 - docker-compose pull telegraf
 - docker-compose pull kapacitor
-- docker-compose pull quay.io/influxdb/chronograf
+- docker-compose pull chronograf
 - docker-compose pull redis
-- docker-compose pull smoczyna/url-converter
+- docker-compose pull url-converter
 - docker-compose up
 
 Similarly to testing all useful scripts and queries are located in /scripts folder of the project.
 
 
-        Monitoring and Statistics Gathering : this still needs t be updated, I didn't do much about that as it is nt the priority.
+        Monitoring and Statistics Gathering : this still needs to be updated, I didn't do much about that as it is not the priority.
         Chronograf allows to configure any type of measurements and visualize them however it needs queries to do it.
-        Up to now all stress and performance tests can be run by python attached scripts, available in scripts folder.
+        Some basic scripts can be found in scripts folder but chronograf dashboard need to be created manually using UI. 
+        Python scripts making converter busy for a while may help here, they are also available in scripts folder.
 
+
+### Know issues and limitations
+
+Converter relies on Base62 to Base10 conversion and vice versa. I have tried 2 different algorithms, they are fast and reliable but both have the limitation too.
+The highest convertible Long number is 999999999999999, bigger numbers might cause the conversion results not to match.
+So it seems that overall number of request per URL (proposed short or default) is that high.
+There is no any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
 
 ---
 
@@ -121,7 +135,6 @@ For further reference, please consider the following sections:
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
 * [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.4.0/maven-plugin/reference/html/)
 * [Spring Data Redis (Access+Driver)](https://docs.spring.io/spring-boot/docs/2.4.0/reference/htmlsingle/#boot-features-redis)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.4.0/maven-plugin/reference/html/#build-image)
 * [TICK Stack introduction](https://www.influxdata.com/blog/introduction-to-influxdatas-influxdb-and-tick-stack/)
 * [Influx API Reference](https://docs.influxdata.com/influxdb/v1.8/tools/api/)
 * [Kapacitor API Reference](https://docs.influxdata.com/kapacitor/v1.5/working/cli_client/)
