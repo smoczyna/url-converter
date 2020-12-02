@@ -120,6 +120,7 @@ cd converter-dist
 - docker-compose pull url-converter
 - docker-compose up
 
+You may need 'sudo' to do all of that.
 Similarly to testing all useful scripts and queries are located in /scripts folder of the project.
 
 
