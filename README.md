@@ -1,6 +1,6 @@
 # URL Converter
 
-## Java Service converting long URLs into short once and back.
+## Java Service converting long URLs into short one and back to long one.
  
 #### Project built with Java 11, it is using Redis DB as a persistence storage.
 
