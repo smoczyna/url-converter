@@ -80,6 +80,8 @@ It has pretty nifty interface and provides all tools necessary for application s
 
 ![chronograf](./screen-shots/chronografUI.png)  
 
+### Deployment
+
 Whole stack can be deployed as single docker container.
 Project has folder **monitor** which contain all the files required by the monitor deployment.
 
@@ -89,15 +91,18 @@ following commands pulls all required components and creates the environment:
 - docker pull kapacitor
 - docker pull quay.io/influxdb/chronograf
 - docker pull redis
-- docker pull 
-- finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
+- docker pull smoczyna/url-converter
 
-docker-compose also can pull images, following sequence does the same job:
+finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
+
+**docker-compose** also can pull images, following sequence does the same job:
 
 - docker-compose pull influxdb
 - docker-compose pull telegraf
 - docker-compose pull kapacitor
-- docker-compose pull quay.io/influxdb/chronograf:1.8.8
+- docker-compose pull quay.io/influxdb/chronograf
+- docker-compose pull redis
+- docker-compose pull smoczyna/url-converter
 - docker-compose up
     
 
