@@ -125,7 +125,7 @@ Similarly to testing all useful scripts and queries are located in /scripts fold
 Converter relies on Base62 to Base10 conversion and vice versa. I have tried 2 different algorithms, they are fast and reliable but both have the limitation too.
 The highest convertible Long number is 999999999999999, bigger numbers might cause the conversion results not to match.
 So it seems that overall number of request per URL (proposed short or default) is that high.
-There is no any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
+There isn't any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
 
 Redis connection is synchronized (it's all save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
 
