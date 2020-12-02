@@ -2,7 +2,7 @@ import json
 import asyncio
 from aiohttp import ClientSession
 
-converter_base_url = "http://192.168.0.15:8080/url-converter"
+converter_base_url = "http://localhost:8080/url-converter"
 
 class ConvertRequestLocal(object):
     def __init__(self, url):

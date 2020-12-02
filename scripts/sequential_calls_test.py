@@ -2,7 +2,7 @@ from time import sleep
 import httplib2
 import json
 
-host = "http://192.168.0.15"
+host = "http://localhost"
 
 
 class RestClient(object):
