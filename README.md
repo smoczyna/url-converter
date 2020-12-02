@@ -120,8 +120,10 @@ cd converter-dist
 - docker-compose pull url-converter
 - docker-compose up
 
-You may need 'sudo' to do all of that. Most important thing here is that all ports listed below have to open,
-otherwise converter fails to start:
+You may need 'sudo' to do all of that. 
+
+Most important thing here is that all ports listed below have to open, otherwise converter fails to start:
+
 - 6379
 - 8080
 - 8086
