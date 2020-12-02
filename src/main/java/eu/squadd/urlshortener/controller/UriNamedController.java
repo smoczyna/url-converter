@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
  * author smoczyna
  */
 
+@Api(value = "/url-converter-nam3e", description = "Named URL Converter Controller, user can pass short URL they use")
 @RestController
 @RequestMapping("/url-converter-named")
 public class UriNamedController extends AbstractController {
@@ -30,6 +31,11 @@ public class UriNamedController extends AbstractController {
         return new ResponseEntity<>(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Submits long URL for conversion as a text", notes = "Returns generated short ULR", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful conversion of long URL", response = String.class),
+            @ApiResponse(code = 500, message = "Internal server error")}
+    )
     @PostMapping(value = "/add-plain-text")
     public ResponseEntity<String> convertUrl(@RequestBody final String strJsonConvertRequest) throws Exception {
         LOGGER.info("Received url to convert: " + strJsonConvertRequest);
