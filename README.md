@@ -152,6 +152,9 @@ Redis connection is synchronized (all its save methods) so huge number of parall
         If service is abou to be run on local machine, 'redis' string parameter need to be removed from line 27 of UriRepo class:
         this.jedis = new Jedis("redis"); - that's the line
 
+### Latest
+
+I have added swagger documentation to the project. Since I'm not sure if the code is under review now I decided to leave docker container untouch, it doesn sport Swagger UI then.
 
 ---
 
