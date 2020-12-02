@@ -120,7 +120,8 @@ cd converter-dist
 - docker-compose pull url-converter
 - docker-compose up
 
-You may need 'sudo' to do all of that. Most important thing here is that all ports listed below have to available, nothing can listen on them:
+You may need 'sudo' to do all of that. Most important thing here is that all ports listed below have to open,
+otherwise converter fails to start:
 - 6379
 - 8080
 - 8086
@@ -130,7 +131,6 @@ You may need 'sudo' to do all of that. Most important thing here is that all por
 - 8888
 - 9092
 
-If any of those ports is occupied, converter fails to start.
   
         Monitoring and Statistics Gathering : this still needs to be updated, I didn't do much about that as it is not the priority.
         Chronograf allows to configure any type of measurements and visualize them however it needs queries to do it.
