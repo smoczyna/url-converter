@@ -127,6 +127,8 @@ The highest convertible Long number is 999999999999999, bigger numbers might cau
 So it seems that overall number of request per URL (proposed short or default) is that high.
 There is no any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
 
+Redis conenction is synchorinized (I has to be) and may play a limitations when huge 
+
 ---
 
 ### Reference Documentation
