@@ -141,18 +141,18 @@ Redis connection is synchronized (it's all save methods) so huge number of paral
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.4.0/maven-plugin/reference/html/)
 * [Spring Data Redis (Access+Driver)](https://docs.spring.io/spring-boot/docs/2.4.0/reference/htmlsingle/#boot-features-redis)
 * [TICK Stack introduction](https://www.influxdata.com/blog/introduction-to-influxdatas-influxdb-and-tick-stack/)
 * [Influx API Reference](https://docs.influxdata.com/influxdb/v1.8/tools/api/)
 * [Kapacitor API Reference](https://docs.influxdata.com/kapacitor/v1.5/working/cli_client/)
+* [Docker Compose Reference](https://docs.docker.com/compose/reference/pull/)
 
 ### Guides
-Following guides illustrate how to use some features specifically:
+Following guides illustrate problems I had to deal with specifically:
 
 * [Base62 conversion explained](https://dzone.com/articles/url-shortener-detailed-explanation)
 * [How to send URL as path variable](https://stackoverflow.com/questions/57212145/how-to-pass-url-as-path-variable)
 * [Messaging with Redis](https://spring.io/guides/gs/messaging-redis/)
-* [Docker Compose Reference](https://docs.docker.com/compose/reference/pull/)
+
 
 
