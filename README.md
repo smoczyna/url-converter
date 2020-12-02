@@ -1,6 +1,6 @@
 # URL Converter
 
-## Java Service converting long URLs into short representation.
+## Java Service converting long URLs into short once and back.
  
 #### Project built with Java 11, it is using Redis DB as a persistence storage.
 
@@ -9,22 +9,23 @@ Converter utilizes Base 10 to Base 62 conversion technique to produce short URL 
 General assumption here is that user can send long url with proposed short url or without it.
 _/url-converter-named/_ endponits deal with first case while _/url-converter/_ with the second one respectively. 
 When user send conversion request without care about the result, it's original url used to send request is used
-as the base to create shot url.  
+as the base to create shot url.
+Whatever the way chosen there are two separate endpoints for each method for json and plain text inputs.
 
 ### Endpoints
 
 #### Convert long URL into the short one
 Service exposes 4 endpoints for user convenience:
 
-*  **/url-converter/add** - accepts application/json payload
-*  **/url-converter/add-plain-text** - accepts plain text payload
+*  __/url-converter/add__ - accepts application/json payload
+*  __/url-converter/add-plain-text__ - accepts plain text payload
 
 Both endpoints require json payload of the following format:
     
     {"url": "https://www.llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogochuchaf.eu"}
 
-*  **/url-converter-named/add** - accepts application/json payload
-*  **/url-converter-named/add-plain-text** - accepts plain text payload
+*  __/url-converter-named/add__ - accepts application/json payload
+*  __/url-converter-named/add-plain-text__ - accepts plain text payload
 
 Both endpoints require json payload of the following format:
     
@@ -38,13 +39,13 @@ Long URLs need to be valid syntactically URLs, following examples fail when sent
 #### Convert short URL back into the long one
 Service exposes 4 endpoints corresponding to the conversion method used :
 
-* **/url-converter/get/{id}**
-* **/url-converter-named/get/{id}**
+* __/url-converter/get/{id}__
+* __/url-converter-named/get/{id}__
 
 Both requests find long URLs in the database and return them. 
 
-*  **/url-converter/get/{id}** 
-*  **/url-converter-named/get/{id}**
+*  __/url-converter/get/{id}__
+* __/url-converter-named/get/{id}__
 
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
 
@@ -58,15 +59,14 @@ Source code is a regular Spring application and is organized accordingly:
 
 **application.properties** file is the only resource used. It holds Influx DB connections details required by the service monitor.
     
-    Building and Testing : there will be more about that a bit later, it's contenerization is not reeady yet.
-    For now project can be built and run as regular Spring Boot Application from pretty much any IDE.
-    Monitor is already in docker contaners and its setup is independent. Next section explains hot to deploy it.
-
+    Building : Since whole projects sits in docker containers there is noting to build here. Deployment steps are explained below.
+    Testing: There are couple of python scripts in /scripts floder helping with this. 
+             Their names suggest the purpose and Python interperter is required to run them. More about this can be found below either.
 
 ### Service Monitor
 
 Monitoring and statistics gathering is resolved with TICK stack.
-Service sens its measurements to time series database, which TICK stack picks for further analysis.   
+Service sends its measurements to time series database, which TICK stack picks for further analysis.   
 
 ##### TICK Stack
 
@@ -78,7 +78,7 @@ The TICK Stack is an acronym for a platform of open source tools built to make o
 
 It has pretty nifty interface and provides all tools necessary for application surveillance.
 
-![chronograf](screen-shots/chronografUI.png)  
+![chronograf](./screen-shots/chronografUI.png)  
 
 Whole stack can be deployed as single docker container.
 Project has folder **monitor** which contain all the files required by the monitor deployment.
@@ -87,7 +87,9 @@ following commands pulls all required components and creates the environment:
 - docker pull influxdb
 - docker pull telegraf
 - docker pull kapacitor
-- docker pull quay.io/influxdb/chronograf:1.8.8
+- docker pull quay.io/influxdb/chronograf
+- docker pull redis
+- docker pull 
 - finally _docker-compose up_ executed from monitor folder does all the tricks to put everything together
 
 docker-compose also can pull images, following sequence does the same job:
@@ -97,12 +99,12 @@ docker-compose also can pull images, following sequence does the same job:
 - docker-compose pull kapacitor
 - docker-compose pull quay.io/influxdb/chronograf:1.8.8
 - docker-compose up
-
     
+
     Monitoring and Statistics Gathering : there will be more about that later too, I didn't much about that as it is nt the priority.
     Chronograf allows to configure any type of measurements and visualize them however it needs queries to do it.
     Up to now all stress and performance tests can be run by python attached scripts, available in scripts folder.
-    
+
 
 ---
 
