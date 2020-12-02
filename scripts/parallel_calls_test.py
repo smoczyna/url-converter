@@ -50,8 +50,12 @@ async def make_post_requests(url: str, **kwargs) -> None:
         for j in range(1, len(results)):
             short_url = results[j]
             base62_id = short_url.rsplit('/', 1)[1]
-            get_result = await make_get_requests(base62_id, session, **kwargs)
-            print(short_url + ' : ' + get_result)
+            try:
+                if base62_id is not None:
+                    get_result = await make_get_requests(base62_id, session, **kwargs)
+                    print(short_url + ' : ' + get_result)
+            except Exception as ex:
+                print(ex)
 
 
 converter_post_url = converter_base_url + "/add-plain-text"
