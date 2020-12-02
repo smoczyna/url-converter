@@ -129,11 +129,8 @@ You may need 'sudo' to do all of that. Most important thing here is that all por
 - 8094
 - 8888
 - 9092
-IF any of those ports is occupied, converter fails to start.
-
-Similarly to testing all useful scripts and queries are located in /scripts folder of the project.
-
-
+If any of those ports is occupied, converter fails to start.
+  
         Monitoring and Statistics Gathering : this still needs to be updated, I didn't do much about that as it is not the priority.
         Chronograf allows to configure any type of measurements and visualize them however it needs queries to do it.
         Some basic scripts can be found in scripts folder but chronograf dashboard need to be created manually using UI. 
