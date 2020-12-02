@@ -127,7 +127,12 @@ The highest convertible Long number is 999999999999999, bigger numbers might cau
 So it seems that overall number of request per URL (proposed short or default) is that high.
 There is no any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) as it take s too long. 
 
-Redis conenction is synchorinized (I has to be) and may play a limitations when huge 
+Redis connection is synchronized (it's all save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
+
+        The last but not least thing is redis connection, it's host name is hardcoded to be usable in docker
+        If service is abou to be run on local machine, 'redis' string parameter need to be removed from line 27 of UriRepo class:
+        this.jedis = new Jedis("redis"); - that's the line
+
 
 ---
 
