@@ -120,7 +120,17 @@ cd converter-dist
 - docker-compose pull url-converter
 - docker-compose up
 
-You may need 'sudo' to do all of that.
+You may need 'sudo' to do all of that. Most important thing here is that all ports listed below have to available, nothing can listen on them:
+- 6379
+- 8080
+- 8086
+- 8125
+- 8092
+- 8094
+- 8888
+- 9092
+IF any of those ports is occupied, converter fails to start.
+
 Similarly to testing all useful scripts and queries are located in /scripts folder of the project.
 
 
