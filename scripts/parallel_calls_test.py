@@ -1,8 +1,8 @@
 import json
 import asyncio
 from aiohttp import ClientSession
-from multidict import CIMultiDict
 
+converter_base_url = "http://192.168.0.15:8080/url-converter"
 
 class ConvertRequestLocal(object):
     def __init__(self, url):
@@ -19,7 +19,6 @@ async def get_call(url: str, session: ClientSession, **kwargs) -> str:
 
 
 async def post_call(url: str, session: ClientSession, payload, **kwargs) -> str:
-    # headers = CIMultiDict('Content-Type': 'application/json') - I don't know how to use that shit
     resp = await session.request(method="POST", url=url, data=payload, **kwargs)
     resp.raise_for_status()
     return await resp.text()
@@ -32,7 +31,7 @@ def generate_payload(url: str, count: int):
 
 
 async def make_get_requests(b62_id: str, session: ClientSession, **kwargs) -> None:
-    url = "http://localhost:8080/url-converter/get/" + b62_id
+    url = converter_base_url + "/get/" + b62_id
     resp = await session.request(method="GET", url=url, **kwargs)
     resp.raise_for_status()
     return await resp.text()
@@ -55,6 +54,5 @@ async def make_post_requests(url: str, **kwargs) -> None:
             print(short_url + ' : ' + get_result)
 
 
-converter_url = "http://localhost:8080/url-converter/add-plain-text"
-asyncio.run(make_post_requests(converter_url))
-# await asyncio.sleep(0)
+converter_post_url = converter_base_url + "/add-plain-text"
+asyncio.run(make_post_requests(converter_post_url))

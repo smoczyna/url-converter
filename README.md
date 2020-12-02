@@ -129,6 +129,7 @@ You may need 'sudo' to do all of that. Most important thing here is that all por
 - 8094
 - 8888
 - 9092
+
 If any of those ports is occupied, converter fails to start.
   
         Monitoring and Statistics Gathering : this still needs to be updated, I didn't do much about that as it is not the priority.
@@ -144,7 +145,7 @@ The highest convertible Long number is 999999999999999, bigger numbers might cau
 So it seems that overall number of request per URL (proposed short or default) is that high.
 There isn't any feature checking if that happens. However, I couldn't reach that limit on my home machine(s) to verify that as it takes too long. 
 
-Redis connection is synchronized (it's all save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
+Redis connection is synchronized (all its save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
 
         The last but not least thing is redis connection, it's host name is hardcoded to be usable in docker
         If service is abou to be run on local machine, 'redis' string parameter need to be removed from line 27 of UriRepo class:

@@ -1,35 +1,30 @@
-from datetime import time
 from time import sleep
-
-import redis
-import pprint
+import httplib2
 import json
-from rest_client import RestClient
 
-c = redis.ConnectionPool(host='localhost', port=6379, db=0, decode_responses=True)
-r = redis.StrictRedis(connection_pool=c)
+host = "http://192.168.0.15"
 
 
-def get_all_keys(key):
-    return r.hgetall(key)
+class RestClient(object):
 
+    @staticmethod
+    def rest_call(method, rest_path, body, no_headers=False):
+        try:
+            from urlparse import urlparse
+        except ImportError:
+            from urllib.parse import urlparse
 
-def delete_everything():
-    for key in r.scan_iter("*"):
-        r.delete(key)
-
-
-def delete_old_keys():
-    for key in r.scan_iter("*"):
-        idle = r.object("idletime", key)
-        if idle > 7776000:  # idle time is in seconds, current value - 90 days, 86400 - 1 day
-            r.delete(key)
-
-
-def expire_all_keys():
-    for key in r.scan_iter("*"):
-        if r.ttl(key) == -1:
-            r.expire(key, 60 * 60 * 24 * 7)  # This would clear them out in a week
+        no_headers = {}
+        headers = {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+        baseUri = host + ':8080'
+        target = urlparse(baseUri + rest_path)
+        h = httplib2.Http()
+        if no_headers:
+            return h.request(target.geturl(), method, body, no_headers)
+        else:
+            return h.request(target.geturl(), method, body, headers)
 
 
 class ConvertRequestLocal(object):
@@ -40,9 +35,6 @@ class ConvertRequestLocal(object):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
-print("cleaning database first")
-delete_everything()
-print(r.keys('*'))
 client = RestClient()
 request_no = 0
 out_file_success = open('converted-success.json', 'w')
@@ -88,10 +80,3 @@ print("*** end of test ***")
 
 print("*** number of successful calls: " + str(success))
 print("*** number of failed calls: " + str(success))
-
-entries = get_all_keys('url:')
-print("Number of URLs save in DB: " + str(len(entries)))
-
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(entries)
-
