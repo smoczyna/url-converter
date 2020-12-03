@@ -97,7 +97,7 @@ Correct folder content looks like this:
 
 ![converter-dist](./screen-shots/converter-dist-contents.png)
 
-All missing folder should added manually bore running docker commands.
+All missing folder should be added manually before running docker commands.
 
 following commands pulls all required components and creates the environment:
 - docker pull influxdb
