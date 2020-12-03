@@ -48,6 +48,7 @@ Both requests find long URLs in the database and return them.
 * __/url-converter-named/get/{id}__
 
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
+
 However those methods expect a special header named 'short-url' containing short URL generated before to do conversion back.
 Methods return error if header is missing.
 
