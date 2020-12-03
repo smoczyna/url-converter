@@ -49,8 +49,10 @@ Both requests find long URLs in the database and return them.
 
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
 
-However those methods expect a special header named 'short-url' containing short URL generated before to do conversion back.
-Methods return error if header is missing.
+Those methods however expect a special header named 'short-url' containing short URL generated before to do conversion back.
+Methods return error if header is missing. HEre is the Postman example of such call:
+
+![postman](./screen-shots/postman-example.png)
 
 ### Project Structure
 Source code is a regular Spring application and is organized accordingly:
