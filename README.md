@@ -50,7 +50,7 @@ Both requests find long URLs in the database and return them.
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
 
 Those methods however expect a special header named 'short-url' containing short URL generated before to do conversion back.
-Methods return error if header is missing. HEre is the Postman example of such call:
+Methods return error if header is missing. Here is an example of such call from Postman:
 
 ![postman](./screen-shots/postman-example.png)
 
