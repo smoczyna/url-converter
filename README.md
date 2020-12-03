@@ -92,7 +92,7 @@ It has pretty nifty interface and provides all tools necessary for application s
 
 Whole stack can be deployed as single docker container.
 Project has folder **converter-dist** which contain all the files required by the monitor deployment.
-However due to git restrictions contents of this folder are added to properly, GitHub does not contain everything as it supposed to.
+However due to git restrictions contents of this folder are not properly added. GitHub does not pull everything as it supposed to.
 Correct folder content looks like this:
 
 ![converter-dist](./screen-shots/converter-dist-contents.png)
