@@ -8,8 +8,8 @@ Converter utilizes Base 10 to Base 62 conversion technique to produce short URL 
 
 General assumption here is that user can send long url with proposed short url or without it.
 _/url-converter-named/_ endponits deal with first case while _/url-converter/_ with the second one respectively. 
-When user send conversion request without care about the result, it's original url used to send request is used
-as the base to create shot url.
+When user send conversion request using the second option (without proposed short URL), it's original url, from which request is coming,
+is being used as the base to create shot url.
 Whatever the way chosen there are two separate endpoints for each method for json and plain text inputs.
 
 ### Endpoints
