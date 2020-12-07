@@ -152,7 +152,7 @@ There isn't any feature checking if that happens. However, I couldn't reach that
 Redis connection is synchronized (all its save methods) so huge number of parallel calls make cause a bottleneck here, it's worth checking. 
 
         The last but not least thing is redis connection, it's host name is hardcoded to be the one defined in docker
-        If service is abou to be run on local machine, 'redis' string parameter need to be removed from line 27 of UriRepo class:
+        If service is about to be run on local machine, 'redis' string parameter need to be removed from line 27 of UriRepo class:
         this.jedis = new Jedis("redis"); - that's the line
 
 ### Latest
