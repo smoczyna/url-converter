@@ -157,7 +157,7 @@ Redis connection is synchronized (all its save methods) so huge number of parall
 
 ### Latest
 
-I have added swagger API documentation to the project. Docker image has been updated accordingly.
+I have added swagger API documentation to the project. Docker image has been updated accordingly but it doesn't serve swagger-ui so far.
 
 ---
 
