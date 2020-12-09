@@ -7,7 +7,7 @@
 Converter utilizes Base 10 to Base 62 conversion technique to produce short URL and convert them back into long URL one.
 
 General assumption here is that user can send long url with proposed short url or without it.
-_/url-converter-named/_ endponits deal with first case while _/url-converter/_ with the second one respectively. 
+_/url-converter-named/_ endpoints deal with first case while _/url-converter/_ with the second one respectively. 
 When user send conversion request using the second option (without proposed short URL), it's original url, from which request is coming,
 is being used as the base to create shot url.
 Whatever the way chosen there are two separate endpoints for each method for json and plain text inputs.
@@ -50,7 +50,7 @@ Both requests find long URLs in the database and return them.
 Both methods obtain long URL with generated short ID which the last section of short URL (everything after last slash).
 
 Those methods however expect a special header named 'short-url' containing short URL generated before to do conversion back.
-Methods return error if header is missing. Here is an example of such call from Postman. Spoken header is the last one.
+Methods return error if header is missing. Image below shows an example of such call with Postman. The header spoken here is the last one.
 
 ![postman](./screen-shots/postman-example.png)
 
@@ -66,7 +66,8 @@ Source code is a regular Spring application and is organized accordingly:
     
 #### Building
 
-Since whole projects sits in docker containers there is noting to build here. Deployment steps are explained below.
+Whole projects sits in docker containers and there is no build steps required.
+Instead, all necessary images need to be downloaded and packed into the container running all the components. Deployment steps are explained below.
     
 #### Testing
 
@@ -125,8 +126,7 @@ cd converter-dist
 
 You may need 'sudo' to do all of that. 
 
-Most important thing here is that all ports listed below have to open, otherwise converter fails to start:
-
+Most important thing at thi stage is that all ports listed below have to be open, otherwise converter fails to start:
 - 6379 
 - 8080 
 - 8086 
@@ -157,7 +157,7 @@ Redis connection is synchronized (all its save methods) so huge number of parall
 
 ### Latest
 
-I have added swagger documentation to the project. 
+I have added swagger API documentation to the project. 
 Since I'm not sure if the code is under review now I decided to leave docker container untouched, it doesn't sport Swagger UI then.
 
 ---

@@ -59,7 +59,7 @@ class UriRepoTest {
         assertNotNull(uniqueID);
 
         uriRepo.saveHUrl("url:" + id, longUrl);
-        String baseString = UriValidator.formatLocalURLFromShortener("localhost:8080/urlshortener");
+        String baseString = UriValidator.formatLocalURLToShort("localhost:8080/urlshortener");
         String shortenedURL = baseString + uniqueID;
         LOGGER.info("Shortened URL: " + shortenedURL);
         assertNotNull(shortenedURL);
@@ -86,7 +86,7 @@ class UriRepoTest {
 
     @Test
     void urlShorteningGivenTest() {
-        String shortUrl = "www.this.was.hero";
+        String shortUrl = "http://www.this.was.hero/73654736574";
         String longUrl = "https://www.theguardian.com/football/this-is-url-sent-from-repo-test-IE";
         LOGGER.info("Shorten up this url: {}", longUrl);
 
@@ -99,7 +99,7 @@ class UriRepoTest {
         assertNotNull(uniqueID);
 
         uriRepo.saveNamedHKey(shortUrl, "url:" + id, longUrl);
-        String baseString = UriValidator.formatLocalURLFromShortener(shortUrl);
+        String baseString = UriValidator.formatLocalURLToShort(shortUrl);
         String shortenedURL = baseString + uniqueID;
         LOGGER.info("Shortened URL: " + shortenedURL);
         assertNotNull(shortenedURL);

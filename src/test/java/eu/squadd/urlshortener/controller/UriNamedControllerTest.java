@@ -86,5 +86,10 @@ class UriNamedControllerTest extends UrlShortenerApplicationTests {
         this.mvc.perform(get("/url-converter-named/redirect/" + "/" + id)
                 .header("short-url", "www.this.is.hero"))
                 .andExpect(status().is3xxRedirection());
+
+        exception = assertThrows(NestedServletException.class, () -> {
+            ResultActions failedResponse = this.mvc.perform(get("/url-converter-named/redirect/" + id));
+        });
+        assertEquals("Request processing failed; nested exception is java.util.NoSuchElementException: Generated before Short URL need to be provided in the header: short-url", exception.getMessage());
     }
 }

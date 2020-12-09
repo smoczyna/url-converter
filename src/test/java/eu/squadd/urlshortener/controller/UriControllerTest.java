@@ -37,11 +37,11 @@ class UriControllerTest extends UrlShortenerApplicationTests {
 
         String convertedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(convertedUrl, "Converter always returns something");
-        Assert.hasText("http:localhosturl-converter/", convertedUrl);
+        Assert.hasText("http://localhosturl-converter/", convertedUrl);
 
         String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
         this.mvc.perform(get("/url-converter/get/" + "/" + id)
-                .header("short-url", "http:localhosturl-converter"))
+                .header("short-url", "http://localhosturl-converter"))
                 .andExpect(status().is2xxSuccessful());
     }
 
@@ -70,15 +70,24 @@ class UriControllerTest extends UrlShortenerApplicationTests {
 
         String convertedUrl = response.andReturn().getResponse().getContentAsString();
         Assert.notNull(convertedUrl, "Converter always returns something");
-        Assert.hasText("http:localhosturl-converter/", convertedUrl);
+        Assert.hasText("http://localhosturl-converter/", convertedUrl);
 
         String id = convertedUrl.substring(convertedUrl.lastIndexOf('/') + 1);
 
         this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is2xxSuccessful());
 
         this.mvc.perform(get("/url-converter/redirect/" + id)
-                .header("short-url", "http:localhosturl-converter"))
+                .header("short-url", "http://localhosturl-converter"))
                 .andExpect(status().is3xxRedirection());
+
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+            ResultActions failedResponse = this.mvc.perform(get("/url-converter/redirect/" + id));
+        });
+        assertEquals("Request processing failed; nested exception is java.util.NoSuchElementException: Generated before Short URL need to be provided in the header: short-url", exception.getMessage());
     }
 
+//    @Test
+//    public void failedGetTest() throws Exception {
+//        this.mvc.perform(get("/url-converter/get/" + id)).andExpect(status().is2xxSuccessful());
+//    }
 }

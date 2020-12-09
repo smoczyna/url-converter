@@ -61,7 +61,7 @@
     100%
   </span>
   <span class="absValue">
-    (20/ 20)
+    (22/ 22)
   </span>
 </td>
 </tr>
@@ -77,67 +77,94 @@
 <i>3</i>&nbsp;import com.google.gson.Gson;
 <i>4</i>&nbsp;import eu.squadd.urlshortener.model.ConvertRequest;
 <i>5</i>&nbsp;import eu.squadd.urlshortener.service.UriConverterService;
-<i>6</i>&nbsp;import org.springframework.http.HttpStatus;
-<i>7</i>&nbsp;import org.springframework.http.ResponseEntity;
-<i>8</i>&nbsp;import org.springframework.validation.annotation.Validated;
-<i>9</i>&nbsp;import org.springframework.web.bind.annotation.*;
-<i>10</i>&nbsp;import org.springframework.web.servlet.view.RedirectView;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import javax.servlet.http.HttpServletRequest;
-<i>13</i>&nbsp;import java.util.NoSuchElementException;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;/**
-<i>16</i>&nbsp; * author smoczyna
-<i>17</i>&nbsp; */
+<i>6</i>&nbsp;import io.swagger.annotations.Api;
+<i>7</i>&nbsp;import io.swagger.annotations.ApiOperation;
+<i>8</i>&nbsp;import io.swagger.annotations.ApiResponse;
+<i>9</i>&nbsp;import io.swagger.annotations.ApiResponses;
+<i>10</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>11</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i>12</i>&nbsp;import org.springframework.validation.annotation.Validated;
+<i>13</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>14</i>&nbsp;import org.springframework.web.servlet.view.RedirectView;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import javax.servlet.http.HttpServletRequest;
+<i>17</i>&nbsp;import java.util.NoSuchElementException;
 <i>18</i>&nbsp;
-<i>19</i>&nbsp;@RestController
-<i>20</i>&nbsp;@RequestMapping(&quot;/url-converter-named&quot;)
-<i>21</i>&nbsp;public class UriNamedController extends AbstractController {
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * author smoczyna
+<i>21</i>&nbsp; */
 <i>22</i>&nbsp;
-<i>23</i>&nbsp;    public UriNamedController(UriConverterService service) {
-<b class="fc"><i>24</i>&nbsp;        super(service);</b>
-<b class="fc"><i>25</i>&nbsp;    }</b>
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    @PostMapping(value = &quot;/add&quot;, consumes = &quot;application/json&quot;)
-<i>28</i>&nbsp;    public ResponseEntity&lt;String&gt; convertUrl(@RequestBody @Validated final ConvertRequest convertRequest) throws Exception {
-<b class="fc"><i>29</i>&nbsp;        LOGGER.info(&quot;Received url to convert: &quot; + convertRequest.getLongUrl());</b>
-<b class="fc"><i>30</i>&nbsp;        return new ResponseEntity&lt;&gt;(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);</b>
-<i>31</i>&nbsp;    }
-<i>32</i>&nbsp;
-<i>33</i>&nbsp;    @PostMapping(value = &quot;/add-plain-text&quot;)
-<i>34</i>&nbsp;    public ResponseEntity&lt;String&gt; convertUrl(@RequestBody final String strJsonConvertRequest) throws Exception {
-<b class="fc"><i>35</i>&nbsp;        LOGGER.info(&quot;Received url to convert: &quot; + strJsonConvertRequest);</b>
-<b class="fc"><i>36</i>&nbsp;        ConvertRequest convertRequest = new Gson().fromJson(strJsonConvertRequest, ConvertRequest.class);</b>
-<b class="fc"><i>37</i>&nbsp;        return new ResponseEntity&lt;&gt;(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);</b>
-<i>38</i>&nbsp;    }
-<i>39</i>&nbsp;
-<i>40</i>&nbsp;    @GetMapping(&quot;/get/{id}&quot;)
-<i>41</i>&nbsp;    public ResponseEntity&lt;String&gt; redirectUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
-<b class="fc"><i>42</i>&nbsp;        String shortUrl = request.getHeader(&quot;short-url&quot;);</b>
-<b class="fc"><i>43</i>&nbsp;        if (shortUrl == null) throw new NoSuchElementException(&quot;Generated before Short URL need to be provided in the header: short-url&quot;);</b>
-<b class="fc"><i>44</i>&nbsp;        String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);</b>
-<b class="fc"><i>45</i>&nbsp;        LOGGER.info(&quot;Original URL: &quot; + redirectUrlString);</b>
-<b class="fc"><i>46</i>&nbsp;        return new ResponseEntity&lt;&gt;(redirectUrlString, HttpStatus.OK);</b>
-<i>47</i>&nbsp;    }
-<i>48</i>&nbsp;
-<i>49</i>&nbsp;    @GetMapping(&quot;/redirect/{id}&quot;)
-<i>50</i>&nbsp;    public RedirectView redirectShorUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
-<b class="fc"><i>51</i>&nbsp;        LOGGER.info(&quot;Received uniqueID to redirect: &quot; + id);</b>
-<b class="fc"><i>52</i>&nbsp;        String shortUrl = request.getHeader(&quot;short-url&quot;);</b>
-<b class="fc"><i>53</i>&nbsp;        if (shortUrl == null) throw new NoSuchElementException(&quot;Generated before Short URL need to be provided in the header: short-url&quot;);</b>
-<b class="fc"><i>54</i>&nbsp;        String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);</b>
-<b class="fc"><i>55</i>&nbsp;        LOGGER.info(&quot;Original URL: &quot; + redirectUrlString);</b>
-<b class="fc"><i>56</i>&nbsp;        RedirectView redirectView = new RedirectView();</b>
-<b class="fc"><i>57</i>&nbsp;        redirectView.setUrl(&quot;http://&quot; + redirectUrlString);</b>
-<b class="fc"><i>58</i>&nbsp;        return redirectView;</b>
-<i>59</i>&nbsp;    }
-<i>60</i>&nbsp;}
+<i>23</i>&nbsp;@Api(value = &quot;/url-converter-nam3e&quot;, description = &quot;Named URL Converter Controller, user can pass short URL they use&quot;)
+<i>24</i>&nbsp;@RestController
+<i>25</i>&nbsp;@RequestMapping(&quot;/url-converter-named&quot;)
+<i>26</i>&nbsp;public class UriNamedController extends AbstractController {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public UriNamedController(UriConverterService service) {
+<b class="fc"><i>29</i>&nbsp;        super(service);</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @PostMapping(value = &quot;/add&quot;, consumes = &quot;application/json&quot;)
+<i>33</i>&nbsp;    @ApiOperation(value = &quot;Submits long URL for conversion&quot;, notes = &quot;Returns generated short ULR&quot;, response = String.class)
+<i>34</i>&nbsp;    @ApiResponses(value = {
+<i>35</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successful conversion of long URL&quot;, response = String.class),
+<i>36</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error&quot;)}
+<i>37</i>&nbsp;    )
+<i>38</i>&nbsp;    public ResponseEntity&lt;String&gt; convertUrl(@RequestBody @Validated final ConvertRequest convertRequest) throws Exception {
+<b class="fc"><i>39</i>&nbsp;        LOGGER.info(&quot;Received url to convert: &quot; + convertRequest.getLongUrl());</b>
+<b class="fc"><i>40</i>&nbsp;        return new ResponseEntity&lt;&gt;(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @ApiOperation(value = &quot;Submits long URL for conversion as a text&quot;, notes = &quot;Returns generated short ULR&quot;, response = String.class)
+<i>44</i>&nbsp;    @ApiResponses(value = {
+<i>45</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successful conversion of long URL&quot;, response = String.class),
+<i>46</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error&quot;)}
+<i>47</i>&nbsp;    )
+<i>48</i>&nbsp;    @PostMapping(value = &quot;/add-plain-text&quot;)
+<i>49</i>&nbsp;    public ResponseEntity&lt;String&gt; convertUrl(@RequestBody final String strJsonConvertRequest) throws Exception {
+<b class="fc"><i>50</i>&nbsp;        LOGGER.info(&quot;Received url to convert: &quot; + strJsonConvertRequest);</b>
+<b class="fc"><i>51</i>&nbsp;        ConvertRequest convertRequest = new Gson().fromJson(strJsonConvertRequest, ConvertRequest.class);</b>
+<b class="fc"><i>52</i>&nbsp;        return new ResponseEntity&lt;&gt;(this.convertGiven(convertRequest.getShortUrl(), convertRequest.getLongUrl()), HttpStatus.OK);</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    @GetMapping(&quot;/get/{id}&quot;)
+<i>56</i>&nbsp;    @ApiOperation(value = &quot;Get long URL from the short one generated before&quot;, notes = &quot;Returns original long URL&quot;, response = String.class)
+<i>57</i>&nbsp;    @ApiResponses(value = {
+<i>58</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully found and returned long URL&quot;, response = String.class),
+<i>59</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error&quot;)}
+<i>60</i>&nbsp;    )
+<i>61</i>&nbsp;    public ResponseEntity&lt;String&gt; redirectUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
+<b class="fc"><i>62</i>&nbsp;        String shortUrl = request.getHeader(&quot;short-url&quot;);</b>
+<b class="fc"><i>63</i>&nbsp;        if (shortUrl == null)</b>
+<b class="fc"><i>64</i>&nbsp;            throw new NoSuchElementException(&quot;Generated before Short URL need to be provided in the header: short-url&quot;);</b>
+<b class="fc"><i>65</i>&nbsp;        String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);</b>
+<b class="fc"><i>66</i>&nbsp;        LOGGER.info(&quot;Original URL: &quot; + redirectUrlString);</b>
+<b class="fc"><i>67</i>&nbsp;        return new ResponseEntity&lt;&gt;(redirectUrlString, HttpStatus.OK);</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    @GetMapping(&quot;/redirect/{id}&quot;)
+<i>71</i>&nbsp;    @ApiOperation(value = &quot;Redirect short URL (generated before) to the original long location&quot;)
+<i>72</i>&nbsp;    @ApiResponses(value = {
+<i>73</i>&nbsp;            @ApiResponse(code = 300, message = &quot;Successfully found long URL and redirected the call to it&quot;, response = String.class),
+<i>74</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error&quot;)}
+<i>75</i>&nbsp;    )
+<i>76</i>&nbsp;    public RedirectView redirectShorUrl(@PathVariable String id, HttpServletRequest request) throws NoSuchElementException {
+<b class="fc"><i>77</i>&nbsp;        LOGGER.info(&quot;Received uniqueID to redirect: &quot; + id);</b>
+<b class="fc"><i>78</i>&nbsp;        String shortUrl = request.getHeader(&quot;short-url&quot;);</b>
+<b class="fc"><i>79</i>&nbsp;        if (shortUrl == null)</b>
+<b class="fc"><i>80</i>&nbsp;            throw new NoSuchElementException(&quot;Generated before Short URL need to be provided in the header: short-url&quot;);</b>
+<b class="fc"><i>81</i>&nbsp;        String redirectUrlString = service.getNamedLongUrlWithUniqueID(shortUrl, id);</b>
+<b class="fc"><i>82</i>&nbsp;        LOGGER.info(&quot;Original URL: &quot; + redirectUrlString);</b>
+<b class="fc"><i>83</i>&nbsp;        RedirectView redirectView = new RedirectView();</b>
+<b class="fc"><i>84</i>&nbsp;        redirectView.setUrl(&quot;http://&quot; + redirectUrlString);</b>
+<b class="fc"><i>85</i>&nbsp;        return redirectView;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-11-30 21:22</div>
+    <div style="float:right;">generated on 2020-12-09 12:10</div>
 </div>
 </body>
 </html>
