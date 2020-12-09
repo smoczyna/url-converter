@@ -55,10 +55,10 @@
 </td>
 </tr>
   <tr>
-    <td class="name">UriRepo$$EnhancerBySpringCGLIB$$42d389aa</td>
+    <td class="name">UriRepo$$EnhancerBySpringCGLIB$$49d0814e</td>
   </tr>
   <tr>
-    <td class="name">UriRepo$$EnhancerBySpringCGLIB$$42d389aa$$FastClassBySpringCGLIB$$31ef4048</td>
+    <td class="name">UriRepo$$EnhancerBySpringCGLIB$$49d0814e$$FastClassBySpringCGLIB$$a4107515</td>
   </tr>
   <tr>
     <td class="name">UriRepo$$FastClassBySpringCGLIB$$6351cf7f</td>
@@ -113,126 +113,128 @@
 <b class="fc"><i>23</i>&nbsp;    private static final Logger LOGGER = LoggerFactory.getLogger(UriRepo.class);</b>
 <i>24</i>&nbsp;
 <b class="fc"><i>25</i>&nbsp;    public UriRepo() {</b>
-<b class="fc"><i>26</i>&nbsp;        this.jedis = new Jedis();</b>
-<b class="fc"><i>27</i>&nbsp;        this.idKey = &quot;id&quot;;</b>
-<b class="fc"><i>28</i>&nbsp;        this.urlKey = &quot;url:&quot;;</b>
-<b class="fc"><i>29</i>&nbsp;    }</b>
-<i>30</i>&nbsp;
-<i>31</i>&nbsp;    public UUID generateUID() {
-<b class="fc"><i>32</i>&nbsp;        return UUID.randomUUID();</b>
-<i>33</i>&nbsp;    }
-<i>34</i>&nbsp;
-<i>35</i>&nbsp;    public Long generateId() {
-<b class="fc"><i>36</i>&nbsp;        Long id = this.jedis.incr(this.idKey);</b>
-<b class="fc"><i>37</i>&nbsp;        LOGGER.info(&quot;Incrementing ID: {}&quot;, id - 1);</b>
-<b class="fc"><i>38</i>&nbsp;        return id - 1;</b>
-<i>39</i>&nbsp;    }
-<i>40</i>&nbsp;
-<i>41</i>&nbsp;    public Long generateNamedId(String shortUrl) {
-<b class="fc"><i>42</i>&nbsp;        String namedId = String.format(&quot;%s:%s&quot;, this.idKey, shortUrl);</b>
-<b class="fc"><i>43</i>&nbsp;        Long id = this.jedis.incr(namedId);</b>
-<b class="fc"><i>44</i>&nbsp;        LOGGER.info(&quot;Incrementing ID for: {} {}&quot;, shortUrl, id - 1);</b>
-<b class="fc"><i>45</i>&nbsp;        return id - 1;</b>
-<i>46</i>&nbsp;    }
-<i>47</i>&nbsp;
-<i>48</i>&nbsp;    public void saveUrl(String key, String longUrl) {
-<b class="fc"><i>49</i>&nbsp;        LOGGER.info(&quot;Saving key: {} with {}&quot;, key, longUrl);</b>
-<b class="fc"><i>50</i>&nbsp;        this.jedis.set(key, longUrl);</b>
-<b class="fc"><i>51</i>&nbsp;    }</b>
-<i>52</i>&nbsp;
-<i>53</i>&nbsp;    public void saveHUrl(String key, String longUrl) {
-<b class="fc"><i>54</i>&nbsp;        LOGGER.info(&quot;Saving key: {} with {}&quot;, key, longUrl);</b>
-<b class="fc"><i>55</i>&nbsp;        this.jedis.hset(urlKey, key, longUrl);</b>
-<b class="fc"><i>56</i>&nbsp;    }</b>
-<i>57</i>&nbsp;
-<i>58</i>&nbsp;    public void saveNamedHKey(String shortUrl, String key, String longUrl) {
-<b class="fc"><i>59</i>&nbsp;        LOGGER.info(&quot;Saving: {} at {}&quot;, key, longUrl);</b>
-<b class="fc"><i>60</i>&nbsp;        this.jedis.hset(shortUrl, key, longUrl);</b>
-<b class="fc"><i>61</i>&nbsp;    }</b>
-<i>62</i>&nbsp;
-<i>63</i>&nbsp;    public String getUrlByKey(String key) throws NoSuchElementException {
-<b class="fc"><i>64</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, key);</b>
-<b class="fc"><i>65</i>&nbsp;        String url = this.jedis.get(key);</b>
-<b class="fc"><i>66</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, key);</b>
-<b class="fc"><i>67</i>&nbsp;        if (url == null) {</b>
-<b class="fc"><i>68</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + key + &quot; does not exist&quot;);</b>
-<i>69</i>&nbsp;        }
-<b class="fc"><i>70</i>&nbsp;        return url;</b>
-<i>71</i>&nbsp;    }
-<i>72</i>&nbsp;
-<i>73</i>&nbsp;    public String getHUrlByKey(String key) throws NoSuchElementException {
-<b class="fc"><i>74</i>&nbsp;        LOGGER.info(&quot;Retrieving URl with {}&quot;, key);</b>
-<b class="fc"><i>75</i>&nbsp;        String url = this.jedis.hget(urlKey, key);</b>
-<b class="fc"><i>76</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, key, url);</b>
-<b class="fc"><i>77</i>&nbsp;        if (url == null) {</b>
-<b class="fc"><i>78</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + key + &quot; does not exist&quot;);</b>
-<i>79</i>&nbsp;        }
-<b class="fc"><i>80</i>&nbsp;        return url;</b>
-<i>81</i>&nbsp;    }
-<i>82</i>&nbsp;
-<i>83</i>&nbsp;    public String getUrlById(Long id) throws NoSuchElementException {
-<b class="fc"><i>84</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, id);</b>
-<b class="fc"><i>85</i>&nbsp;        String url = this.jedis.hget(urlKey, &quot;url:&quot; + id);</b>
-<b class="fc"><i>86</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, id);</b>
-<b class="fc"><i>87</i>&nbsp;        if (url == null) {</b>
-<b class="fc"><i>88</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
-<i>89</i>&nbsp;        }
-<b class="fc"><i>90</i>&nbsp;        return url;</b>
-<i>91</i>&nbsp;    }
-<i>92</i>&nbsp;
-<i>93</i>&nbsp;    public String getNamedUrlById(String shortUrl, Long id) throws NoSuchElementException {
-<b class="fc"><i>94</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, id);</b>
-<b class="fc"><i>95</i>&nbsp;        String url = this.jedis.hget(shortUrl, &quot;url:&quot; + id);</b>
-<b class="fc"><i>96</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, id);</b>
-<b class="fc"><i>97</i>&nbsp;        if (url == null) {</b>
-<b class="fc"><i>98</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
-<i>99</i>&nbsp;        }
-<b class="fc"><i>100</i>&nbsp;        return url;</b>
-<i>101</i>&nbsp;    }
-<i>102</i>&nbsp;
-<i>103</i>&nbsp;    public Long deleteKey(String key) {
-<b class="fc"><i>104</i>&nbsp;        LOGGER.info(&quot;Deleting at {}&quot;, key);</b>
-<b class="fc"><i>105</i>&nbsp;        return this.jedis.del(key);</b>
-<i>106</i>&nbsp;    }
-<i>107</i>&nbsp;
-<i>108</i>&nbsp;    public Long deleteHKey(String key) {
-<b class="fc"><i>109</i>&nbsp;        LOGGER.info(&quot;Deleting child at {}&quot;, key);</b>
-<b class="fc"><i>110</i>&nbsp;        return this.jedis.hdel(urlKey, key);</b>
-<i>111</i>&nbsp;    }
-<i>112</i>&nbsp;
-<i>113</i>&nbsp;    public Long deleteHKeyById(Long id) throws NoSuchElementException {
-<b class="fc"><i>114</i>&nbsp;        LOGGER.info(&quot;Deleting entry at {}&quot;, id);</b>
-<b class="fc"><i>115</i>&nbsp;        Long count = this.jedis.hdel(urlKey, &quot;url:&quot; + id);</b>
-<b class="fc"><i>116</i>&nbsp;        LOGGER.info(&quot;URL under key {} permanently delete&quot;, id);</b>
-<b class="fc"><i>117</i>&nbsp;        if (count == 0) {</b>
-<b class="fc"><i>118</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
-<i>119</i>&nbsp;        }
-<b class="fc"><i>120</i>&nbsp;        return count;</b>
-<i>121</i>&nbsp;    }
-<i>122</i>&nbsp;
-<i>123</i>&nbsp;    public Long deleteNamedHKeyById(String shortUrl, Long id) throws NoSuchElementException {
-<b class="fc"><i>124</i>&nbsp;        LOGGER.info(&quot;Deleting entry at {}&quot;, id);</b>
-<b class="fc"><i>125</i>&nbsp;        Long count = this.jedis.hdel(shortUrl, &quot;url:&quot; + id);</b>
-<b class="fc"><i>126</i>&nbsp;        LOGGER.info(&quot;URL under key {} permanently delete&quot;, id);</b>
-<b class="fc"><i>127</i>&nbsp;        if (count == 0) {</b>
-<b class="nc"><i>128</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
-<i>129</i>&nbsp;        }
-<b class="fc"><i>130</i>&nbsp;        return count;</b>
-<i>131</i>&nbsp;    }
-<i>132</i>&nbsp;
-<i>133</i>&nbsp;    public Map&lt;String, String&gt; getAllKeyEntries(String key) {
-<b class="fc"><i>134</i>&nbsp;        LOGGER.info(&quot;Getting all children of {}&quot;, key);</b>
-<b class="fc"><i>135</i>&nbsp;        Map&lt;String, String&gt; result = this.jedis.hgetAll(key);</b>
-<b class="fc"><i>136</i>&nbsp;        LOGGER.info(&quot;All entries of {} retrieved&quot;, key);</b>
-<b class="fc"><i>137</i>&nbsp;        return result;</b>
-<i>138</i>&nbsp;    }
-<i>139</i>&nbsp;}
+<i>26</i>&nbsp;//        this.jedis = new Jedis(&quot;redis&quot;);
+<b class="fc"><i>27</i>&nbsp;        this.jedis = new Jedis();</b>
+<b class="fc"><i>28</i>&nbsp;        this.idKey = &quot;id&quot;;</b>
+<b class="fc"><i>29</i>&nbsp;        this.urlKey = &quot;url:&quot;;</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public UUID generateUID() {
+<b class="fc"><i>33</i>&nbsp;        return UUID.randomUUID();</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    public synchronized Long generateId() {
+<b class="fc"><i>37</i>&nbsp;        Long id = this.jedis.incr(this.idKey);</b>
+<b class="fc"><i>38</i>&nbsp;        LOGGER.info(&quot;Incrementing ID: {}&quot;, id - 1);</b>
+<b class="fc"><i>39</i>&nbsp;        return id - 1;</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public synchronized Long generateNamedId(String shortUrl) {
+<b class="fc"><i>43</i>&nbsp;        String namedId = String.format(&quot;%s:%s&quot;, this.idKey, shortUrl);</b>
+<b class="fc"><i>44</i>&nbsp;        Long id = this.jedis.incr(namedId);</b>
+<b class="fc"><i>45</i>&nbsp;        LOGGER.info(&quot;Incrementing ID for: {} {}&quot;, shortUrl, id - 1);</b>
+<b class="fc"><i>46</i>&nbsp;        return id - 1;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public synchronized void saveUrl(String key, String longUrl) {
+<b class="fc"><i>51</i>&nbsp;        LOGGER.info(&quot;Saving key: {} with {}&quot;, key, longUrl);</b>
+<b class="fc"><i>52</i>&nbsp;        this.jedis.set(key, longUrl);</b>
+<b class="fc"><i>53</i>&nbsp;    }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    public synchronized void saveHUrl(String key, String longUrl) {
+<b class="fc"><i>56</i>&nbsp;        LOGGER.info(&quot;Saving key: {} with {}&quot;, key, longUrl);</b>
+<b class="fc"><i>57</i>&nbsp;        this.jedis.hset(urlKey, key, longUrl);</b>
+<b class="fc"><i>58</i>&nbsp;    }</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    public synchronized void saveNamedHKey(String shortUrl, String key, String longUrl) {
+<b class="fc"><i>61</i>&nbsp;        LOGGER.info(&quot;Saving: {} at {}&quot;, key, longUrl);</b>
+<b class="fc"><i>62</i>&nbsp;        this.jedis.hset(shortUrl, key, longUrl);</b>
+<b class="fc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    public String getUrlByKey(String key) throws NoSuchElementException {
+<b class="fc"><i>66</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, key);</b>
+<b class="fc"><i>67</i>&nbsp;        String url = this.jedis.get(key);</b>
+<b class="fc"><i>68</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, key);</b>
+<b class="fc"><i>69</i>&nbsp;        if (url == null) {</b>
+<b class="fc"><i>70</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + key + &quot; does not exist&quot;);</b>
+<i>71</i>&nbsp;        }
+<b class="fc"><i>72</i>&nbsp;        return url;</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    public String getHUrlByKey(String key) throws NoSuchElementException {
+<b class="fc"><i>76</i>&nbsp;        LOGGER.info(&quot;Retrieving URl with {}&quot;, key);</b>
+<b class="fc"><i>77</i>&nbsp;        String url = this.jedis.hget(urlKey, key);</b>
+<b class="fc"><i>78</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, key, url);</b>
+<b class="fc"><i>79</i>&nbsp;        if (url == null) {</b>
+<b class="fc"><i>80</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + key + &quot; does not exist&quot;);</b>
+<i>81</i>&nbsp;        }
+<b class="fc"><i>82</i>&nbsp;        return url;</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    public String getUrlById(Long id) throws NoSuchElementException {
+<b class="fc"><i>86</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, id);</b>
+<b class="fc"><i>87</i>&nbsp;        String url = this.jedis.hget(urlKey, &quot;url:&quot; + id);</b>
+<b class="fc"><i>88</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, id);</b>
+<b class="fc"><i>89</i>&nbsp;        if (url == null) {</b>
+<b class="fc"><i>90</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
+<i>91</i>&nbsp;        }
+<b class="fc"><i>92</i>&nbsp;        return url;</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    public String getNamedUrlById(String shortUrl, Long id) throws NoSuchElementException {
+<b class="fc"><i>96</i>&nbsp;        LOGGER.info(&quot;Retrieving at {}&quot;, id);</b>
+<b class="fc"><i>97</i>&nbsp;        String url = this.jedis.hget(shortUrl, &quot;url:&quot; + id);</b>
+<b class="fc"><i>98</i>&nbsp;        LOGGER.info(&quot;Retrieved url from {}, result {}&quot;, url, id);</b>
+<b class="fc"><i>99</i>&nbsp;        if (url == null) {</b>
+<b class="fc"><i>100</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
+<i>101</i>&nbsp;        }
+<b class="fc"><i>102</i>&nbsp;        return url;</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    public Long deleteKey(String key) {
+<b class="fc"><i>106</i>&nbsp;        LOGGER.info(&quot;Deleting at {}&quot;, key);</b>
+<b class="fc"><i>107</i>&nbsp;        return this.jedis.del(key);</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    public Long deleteHKey(String key) {
+<b class="fc"><i>111</i>&nbsp;        LOGGER.info(&quot;Deleting child at {}&quot;, key);</b>
+<b class="fc"><i>112</i>&nbsp;        return this.jedis.hdel(urlKey, key);</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    public Long deleteHKeyById(Long id) throws NoSuchElementException {
+<b class="fc"><i>116</i>&nbsp;        LOGGER.info(&quot;Deleting entry at {}&quot;, id);</b>
+<b class="fc"><i>117</i>&nbsp;        Long count = this.jedis.hdel(urlKey, &quot;url:&quot; + id);</b>
+<b class="fc"><i>118</i>&nbsp;        LOGGER.info(&quot;URL under key {} permanently delete&quot;, id);</b>
+<b class="fc"><i>119</i>&nbsp;        if (count == 0) {</b>
+<b class="fc"><i>120</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
+<i>121</i>&nbsp;        }
+<b class="fc"><i>122</i>&nbsp;        return count;</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    public Long deleteNamedHKeyById(String shortUrl, Long id) throws NoSuchElementException {
+<b class="fc"><i>126</i>&nbsp;        LOGGER.info(&quot;Deleting entry at {}&quot;, id);</b>
+<b class="fc"><i>127</i>&nbsp;        Long count = this.jedis.hdel(shortUrl, &quot;url:&quot; + id);</b>
+<b class="fc"><i>128</i>&nbsp;        LOGGER.info(&quot;URL under key {} permanently delete&quot;, id);</b>
+<b class="fc"><i>129</i>&nbsp;        if (count == 0) {</b>
+<b class="nc"><i>130</i>&nbsp;            throw new NoSuchElementException(&quot;URL at key &quot; + id + &quot; does not exist&quot;);</b>
+<i>131</i>&nbsp;        }
+<b class="fc"><i>132</i>&nbsp;        return count;</b>
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    public Map&lt;String, String&gt; getAllKeyEntries(String key) {
+<b class="fc"><i>136</i>&nbsp;        LOGGER.info(&quot;Getting all children of {}&quot;, key);</b>
+<b class="fc"><i>137</i>&nbsp;        Map&lt;String, String&gt; result = this.jedis.hgetAll(key);</b>
+<b class="fc"><i>138</i>&nbsp;        LOGGER.info(&quot;All entries of {} retrieved&quot;, key);</b>
+<b class="fc"><i>139</i>&nbsp;        return result;</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-11-30 21:22</div>
+    <div style="float:right;">generated on 2020-12-09 12:10</div>
 </div>
 </body>
 </html>

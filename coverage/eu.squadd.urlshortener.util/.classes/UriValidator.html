@@ -61,7 +61,7 @@
     100%
   </span>
   <span class="absValue">
-    (11/ 11)
+    (7/ 7)
   </span>
 </td>
 </tr>
@@ -87,30 +87,24 @@
 <i>13</i>&nbsp;
 <b class="fc"><i>14</i>&nbsp;    private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);</b>
 <i>15</i>&nbsp;
-<b class="fc"><i>16</i>&nbsp;    private UriValidator() {}</b>
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    public boolean validateURL(String url) {
-<b class="fc"><i>19</i>&nbsp;        Matcher m = URL_PATTERN.matcher(url);</b>
-<b class="fc"><i>20</i>&nbsp;        return m.matches();</b>
-<i>21</i>&nbsp;    }
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    public static String formatLocalURLFromShortener(String localURL) {
-<b class="fc"><i>24</i>&nbsp;        String[] addressComponents = localURL.split(&quot;/&quot;);</b>
-<i>25</i>&nbsp;        // remove the endpoint (last index)
-<b class="fc"><i>26</i>&nbsp;        StringBuilder sb = new StringBuilder();</b>
-<b class="fc"><i>27</i>&nbsp;        for (int i = 0; i &lt; addressComponents.length - 1; ++i) {</b>
-<b class="fc"><i>28</i>&nbsp;            sb.append(addressComponents[i]);</b>
-<i>29</i>&nbsp;        }
-<b class="fc"><i>30</i>&nbsp;        sb.append(&#39;/&#39;);</b>
-<b class="fc"><i>31</i>&nbsp;        return sb.toString();</b>
-<i>32</i>&nbsp;    }
-<i>33</i>&nbsp;}
+<b class="fc"><i>16</i>&nbsp;    private UriValidator() {</b>
+<b class="fc"><i>17</i>&nbsp;    }</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public boolean validateURL(String url) {
+<b class="fc"><i>20</i>&nbsp;        Matcher m = URL_PATTERN.matcher(url);</b>
+<b class="fc"><i>21</i>&nbsp;        return m.matches();</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public static String formatLocalURLToShort(String localURL) {
+<b class="fc"><i>25</i>&nbsp;        return localURL.substring(0, localURL.lastIndexOf(&quot;/&quot;)).concat(&quot;/&quot;);</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-11-30 21:22</div>
+    <div style="float:right;">generated on 2020-12-09 12:10</div>
 </div>
 </body>
 </html>
